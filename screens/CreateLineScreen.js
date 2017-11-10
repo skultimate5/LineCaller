@@ -3,7 +3,7 @@ import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Button, Header } from 'react-native-elements'; 
 
-export class HomeScreen extends React.Component {
+export class CreateLineScreen extends React.Component {
     //This removes the react-navigation header
     static navigationOptions = {
         title: 'Home',
@@ -15,8 +15,9 @@ export class HomeScreen extends React.Component {
         super(props)
 
         this.state = {
-            hasStoredTeam : false
+            team: props.navigation.state.params.team
         }
+        console.log(this.state.team)
     }
 
     render() {
@@ -24,17 +25,15 @@ export class HomeScreen extends React.Component {
         <View>
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
-                centerComponent={{ text: 'Home', style: { color: '#fff', fontSize:20 } }} 
+                centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
+                rightComponent={{
+                    icon: 'home',
+                    color: '#fff',
+                    onPress: () => this.props.navigation.navigate('Home'),
+                }}
             />
             <View>
-                <Button
-                    raised
-                    icon={{name : 'people'}}
-                    buttonStyle={[{backgroundColor: '#02968A'}, styles.button]}
-                    textStyle={{textAlign: 'center'}}
-                    title={`Create Team`}
-                    onPress={() => this.props.navigation.navigate('CreateTeam')}
-                />
+                <Text> Create Line Screen </Text>
             </View>
         </View>
         );
