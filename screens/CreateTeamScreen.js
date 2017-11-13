@@ -84,7 +84,8 @@ export class CreateTeamScreen extends React.Component {
       }
 
     addPlayer() {
-        var currentPlayerName = this.state.currentPlayerName,
+        //TODO : make sure no duplicate players
+        var currentPlayerName = this.state.currentPlayerName.trim(),
             allPlayers = this.state.players
 
         allPlayers.unshift(currentPlayerName)
@@ -94,14 +95,13 @@ export class CreateTeamScreen extends React.Component {
     }
 
     saveTeam() {
-        //TODO : put player names in alphabetical order
         var team = {
-            name : this.state.teamName,
-            players: this.state.players,
+            name : this.state.teamName.trim(),
+            players: this.state.players.sort(),
             lines: []
         }
 
-        //TODO: save to local storage
+        //TODO: save to local storage --> or do this on next screen
         this.props.navigation.navigate('CreateLine', {team : team})
     }
 }

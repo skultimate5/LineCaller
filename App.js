@@ -11,7 +11,7 @@ const LineCaller = StackNavigator({
   CreateLine: {screen: CreateLineScreen}
 },
 {
-  initialRouteName: 'CreateTeam',
+  initialRouteName: 'CreateLine',
 }
 )
 
