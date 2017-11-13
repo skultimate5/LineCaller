@@ -1,8 +1,8 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import { HomeScreen } from './screens/HomeScreen';
-import { CreateTeamScreen } from './screens/CreateTeamScreen';
-import { CreateLineScreen } from './screens/CreateLineScreen';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { CreateTeamScreen } from './src/screens/CreateTeamScreen';
+import { CreateLineScreen } from './src/screens/CreateLineScreen';
 import { StyleSheet, Text, View } from 'react-native';
 
 const LineCaller = StackNavigator({
@@ -11,7 +11,7 @@ const LineCaller = StackNavigator({
   CreateLine: {screen: CreateLineScreen}
 },
 {
-  initialRouteName: 'CreateLine',
+  initialRouteName: 'Home',
 }
 )
 

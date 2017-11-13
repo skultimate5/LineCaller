@@ -3,6 +3,8 @@ import { AsyncStorage, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Button, Divider, FormLabel, FormInput, Header, List, ListItem } from 'react-native-elements'; 
 
+import LocalStorage from '../storage/LocalStorage';
+
 export class CreateLineScreen extends React.Component {
     //This removes the react-navigation header
     static navigationOptions = {
@@ -20,7 +22,7 @@ export class CreateLineScreen extends React.Component {
             playersAvailable: props.navigation.state.params ? props.navigation.state.params.team.players : ['a', 'b', 'longer name', 'new name', 'hello'],
             playersSelected: []
         }
-        console.log(this.state.team)
+        this.state.LocalStorage = new LocalStorage()
     }
 
     render() {
@@ -76,6 +78,15 @@ export class CreateLineScreen extends React.Component {
                     </ScrollView>
                 </View>
             </View>
+            <View style={{marginTop: 10}}>
+                <Button
+                    raised
+                    buttonStyle={[{backgroundColor: '#02968A'}, styles.button]}
+                    textStyle={{textAlign: 'center'}}
+                    title={`Save Line`}
+                    onPress={() => this.saveLine()}
+                />
+            </View>
         </View>
         );
     }
@@ -95,12 +106,10 @@ export class CreateLineScreen extends React.Component {
         currentPlayersSelected.push(player)
         currentPlayersSelected.sort()
         this.setState({playersSelected: currentPlayersSelected})
-        //this.state.playersSelected.push(player)
-
-        console.log(this.state)
     }
 
     removePlayerFromLine(player) {
+        //TODO : should this ask to remove? or automatically remove?
         var currentPlayersSelected = this.state.playersSelected,
             playerIndex = currentPlayersSelected.indexOf(player)
 
@@ -115,9 +124,15 @@ export class CreateLineScreen extends React.Component {
         currentPlayersAvailable.push(player)
         currentPlayersAvailable.sort()
         this.setState({playersAvailable: currentPlayersAvailable})
-        //this.state.playersSelected.push(player)
+    }
 
-        console.log(this.state)
+    saveLine() {
+        var currentTeam = this.state.team
+
+        currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
+        this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+
+        //TODO : navigate to list of lines screen
     }
 }
 
@@ -125,5 +140,9 @@ const styles = StyleSheet.create({
     halfWidth: {
         flex: .5
     },
+    button: {
+        borderRadius: 10,
+        marginBottom: 10
+    }
 });
 

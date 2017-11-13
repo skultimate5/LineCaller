@@ -3,6 +3,8 @@ import { AsyncStorage, FlatList, ScrollView, StyleSheet, Text, View } from 'reac
 import { StackNavigator } from 'react-navigation';
 import { Button, FormLabel, FormInput, Header, Icon, List, ListItem } from 'react-native-elements'; 
 
+import LocalStorage from '../storage/LocalStorage.js';
+
 export class CreateTeamScreen extends React.Component {
     //This removes the react-navigation header
     static navigationOptions = {
@@ -19,6 +21,7 @@ export class CreateTeamScreen extends React.Component {
             players: [],
             teamName: ''
         }
+        this.state.LocalStorage = new LocalStorage()
     }
 
     render() {
@@ -101,7 +104,8 @@ export class CreateTeamScreen extends React.Component {
             lines: []
         }
 
-        //TODO: save to local storage --> or do this on next screen
+        this.state.LocalStorage.setTeam(team.name, team)
+
         this.props.navigation.navigate('CreateLine', {team : team})
     }
 }

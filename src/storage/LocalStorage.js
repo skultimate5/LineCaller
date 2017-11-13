@@ -1,0 +1,37 @@
+import { AsyncStorage } from 'react-native';
+
+export default class LocalStorage {
+    async getTeam(teamName) {
+        return AsyncStorage.getItem(`@team:${teamName}`)
+        .then((team) => {
+            return JSON.parse(team)
+        })
+    }
+
+    async setTeam(teamName, teamData) {
+        return AsyncStorage.setItem(`@team:${teamName}`, JSON.stringify(teamData))
+    }
+
+    async removeTeam(teamName) {
+        return AsyncStorage.removeItem(`@team:${teamName}`)
+    }
+
+    async getAllTeams() {
+        return AsyncStorage.getAllKeys()
+        .then((keys) => {
+            const fetchKeys = keys.filter((k) => { return k.startsWith('@team:'); });
+            return AsyncStorage.multiGet(fetchKeys);
+        })
+        .then((result) => {
+            return result.map((r) => { return JSON.parse(r[1]); });
+        });
+    }
+
+    async removeAllTeams() {
+        this.getAllTeams().then((teams) => {
+            teams.forEach((team) => {
+                this.removeTeam(team.name)
+            })
+        })
+    }
+}
