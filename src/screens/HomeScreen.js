@@ -17,15 +17,31 @@ export class HomeScreen extends React.Component {
         super(props)
 
         this.state = {
+            currentTeamName: '',
             hasStoredTeam : false,
+            isLoading: true,
             LocalStorage: new LocalStorage()
         }
 
         // this.state.LocalStorage.removeAllTeams()
+        // this.state.LocalStorage.removeCurrentTeamName()
 
-        this.state.LocalStorage.getAllTeams().then((items) => {
-            console.log(items)
-        })
+        // this.state.LocalStorage.getAllTeams().then((items) => {
+        //     console.log(items)
+        // })
+    }
+    
+    componentDidMount() {
+        this.setState({isLoading : true})
+        this.getCurrentTeamName()
+    }
+
+    async getCurrentTeamName() {
+        let currentTeamName = await this.state.LocalStorage.getCurrentTeamName()
+
+        console.log(currentTeamName) 
+        this.setState({currentTeamName})
+        this.setState({isLoading : false})
     }
 
     render() {
@@ -36,14 +52,57 @@ export class HomeScreen extends React.Component {
                 centerComponent={{ text: 'Home', style: { color: '#fff', fontSize:20 } }} 
             />
             <View>
-                <Button
-                    raised
-                    icon={{name : 'people'}}
-                    buttonStyle={[{backgroundColor: '#02968A'}, styles.button]}
-                    textStyle={{textAlign: 'center'}}
-                    title={`Create Team`}
-                    onPress={() => this.props.navigation.navigate('CreateTeam')}
-                />
+                <View>
+                    {this.state.isLoading && <Text style={{ color: 'red', textAlign: 'center' }}>Loading</Text>}
+                    {!this.state.isLoading && this.state.currentTeamName != null && 
+                        <View>
+                            <Text style={{ fontSize: 30, textAlign: 'center', marginBottom: 15, marginTop: 5 }}>Team : {this.state.currentTeamName}</Text>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    icon={{name : 'add'}}
+                                    buttonStyle={[{backgroundColor: '#02968A'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Create New Game`}
+                                    onPress={() => console.log('Create New Game')}
+                                />
+                            </View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    icon={{name : 'list'}}
+                                    buttonStyle={[{backgroundColor: '#2095F2'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`View Lines`}
+                                    onPress={() => this.props.navigation.navigate('ViewLines', {currentTeamName : this.state.currentTeamName})}
+                                />
+                            </View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    icon={{name : 'people'}}
+                                    buttonStyle={[{backgroundColor: '#9C28B0'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Change Team`}
+                                    onPress={() => console.log('Change Team')}
+                                />
+                            </View>
+                        </View>
+                    }
+                    {!this.state.isLoading && this.state.currentTeamName == null && 
+                        <View style={styles.button}>
+                            <Button
+                                raised
+                                icon={{name : 'people'}}
+                                buttonStyle={[{backgroundColor: '#02968A'}]}
+                                textStyle={{textAlign: 'center'}}
+                                title={`Create Team`}
+                                onPress={() => this.props.navigation.navigate('CreateTeam')}
+                            />
+                        </View>
+                    }
+                    
+                </View>
             </View>
         </View>
         );
@@ -52,6 +111,9 @@ export class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-
+    button: {
+        borderRadius: 10,
+        marginTop: 25
+    }
 });
 

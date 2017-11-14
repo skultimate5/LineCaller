@@ -29,12 +29,12 @@ export class CreateTeamScreen extends React.Component {
         <View style={styles.container}>
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
-                centerComponent={{ text: 'Create Team', style: { color: '#fff', fontSize:20 } }} 
-                rightComponent={{
+                leftComponent={{
                     icon: 'home',
                     color: '#fff',
                     onPress: () => this.props.navigation.navigate('Home'),
                 }}
+                centerComponent={{ text: 'Create Team', style: { color: '#fff', fontSize:20 } }} 
             />
             <View style={{flex: 1}}>
                     <FormLabel>Team Name</FormLabel>
@@ -84,14 +84,13 @@ export class CreateTeamScreen extends React.Component {
             <Text style={styles.buttonText}>Show unlinked tags</Text>
           </View>
         )
-      }
+    }
+
 
     addPlayer() {
         //TODO : make sure no duplicate players
-        var currentPlayerName = this.state.currentPlayerName.trim(),
-            allPlayers = this.state.players
-
-        allPlayers.unshift(currentPlayerName)
+        let currentPlayerName = this.state.currentPlayerName.trim(),
+            allPlayers = [currentPlayerName,...this.state.players]
 
         this.setState({players: allPlayers})
         this.setState({currentPlayerName: ''})
@@ -105,8 +104,9 @@ export class CreateTeamScreen extends React.Component {
         }
 
         this.state.LocalStorage.setTeam(team.name, team)
+        this.state.LocalStorage.setCurrentTeamName(team.name)
 
-        this.props.navigation.navigate('CreateLine', {team : team})
+        this.props.navigation.navigate('CreateLine', {team : team, players: team.players})
     }
 }
 

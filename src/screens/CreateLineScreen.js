@@ -17,12 +17,14 @@ export class CreateLineScreen extends React.Component {
         super(props)
 
         this.state = {
-            team: props.navigation.state.params ? props.navigation.state.params.team : {name: 'test team name', players: ['a', 'b', 'longer name', 'new name', 'hello'], lines: []},
+            team: props.navigation.state.params.team,
             lineName: '',
-            playersAvailable: props.navigation.state.params ? props.navigation.state.params.team.players : ['a', 'b', 'longer name', 'new name', 'hello'],
+            playersAvailable: props.navigation.state.params.players,
             playersSelected: []
         }
         this.state.LocalStorage = new LocalStorage()
+
+        console.log(this.state)
     }
 
     render() {
@@ -30,12 +32,12 @@ export class CreateLineScreen extends React.Component {
         <View style={{flex : 1}}>
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
-                centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
-                rightComponent={{
+                leftComponent={{
                     icon: 'home',
                     color: '#fff',
                     onPress: () => this.props.navigation.navigate('Home'),
                 }}
+                centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
             />
             <View style={{flex: 0.15}}>
                 <FormLabel>Line Name</FormLabel>
@@ -81,7 +83,7 @@ export class CreateLineScreen extends React.Component {
             <View style={{marginTop: 10}}>
                 <Button
                     raised
-                    buttonStyle={[{backgroundColor: '#02968A'}, styles.button]}
+                    buttonStyle={[{backgroundColor: '#02968A'}]}
                     textStyle={{textAlign: 'center'}}
                     title={`Save Line`}
                     onPress={() => this.saveLine()}
@@ -92,47 +94,42 @@ export class CreateLineScreen extends React.Component {
     }
 
     addPlayerToLine(player) {
-        var currentPlayersAvailable = this.state.playersAvailable,
-            playerIndex = currentPlayersAvailable.indexOf(player)
-
-        if (playerIndex > -1) {
-            currentPlayersAvailable.splice(playerIndex, 1)
-        }
+        let currentPlayersAvailable = this.state.playersAvailable.slice(),
+            currentPlayerIndex = currentPlayersAvailable.indexOf(player)
+        
+        currentPlayersAvailable.splice(currentPlayerIndex, 1)
 
         this.setState({playersAvailable : currentPlayersAvailable})
 
-        var currentPlayersSelected = this.state.playersSelected
-        
-        currentPlayersSelected.push(player)
+        var currentPlayersSelected = this.state.playersSelected.concat(player)
+
         currentPlayersSelected.sort()
         this.setState({playersSelected: currentPlayersSelected})
     }
 
     removePlayerFromLine(player) {
         //TODO : should this ask to remove? or automatically remove?
-        var currentPlayersSelected = this.state.playersSelected,
-            playerIndex = currentPlayersSelected.indexOf(player)
-
-        if (playerIndex > -1) {
-            currentPlayersSelected.splice(playerIndex, 1)
-        }
+        let currentPlayersSelected = this.state.playersSelected.slice(),
+            currentPlayerIndex = currentPlayersSelected.indexOf(player)
+    
+        currentPlayersSelected.splice(currentPlayerIndex, 1)
 
         this.setState({playersSelected : currentPlayersSelected})
 
-        var currentPlayersAvailable = this.state.playersAvailable
-        
-        currentPlayersAvailable.push(player)
+        var currentPlayersAvailable = this.state.playersAvailable.concat(player)
+
         currentPlayersAvailable.sort()
         this.setState({playersAvailable: currentPlayersAvailable})
     }
 
     saveLine() {
-        var currentTeam = this.state.team
+        let currentTeam = Object.assign({}, this.state.team)
 
         currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
+
         this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
 
-        //TODO : navigate to list of lines screen
+        this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
     }
 }
 

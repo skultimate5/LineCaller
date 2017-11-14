@@ -34,4 +34,19 @@ export default class LocalStorage {
             })
         })
     }
+
+    async getCurrentTeamName() {
+        return AsyncStorage.getItem(`currentTeamName`)
+        .then((team) => {
+            return team
+        })
+    }
+
+    async setCurrentTeamName(currentTeamName) {
+        return AsyncStorage.setItem(`currentTeamName`, currentTeamName)
+    }
+
+    async removeCurrentTeamName(teamName) {
+        return AsyncStorage.removeItem(`currentTeamName`)
+    }
 }
