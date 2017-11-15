@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation';
 import { Button, Divider, FormLabel, FormInput, Header, List, ListItem } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage';
+import PlayerSelector from '../components/playerSelector'
 
 export class CreateLineScreen extends React.Component {
     //This removes the react-navigation header
@@ -59,42 +60,11 @@ export class CreateLineScreen extends React.Component {
                 <FormInput value={this.state.lineName} onChangeText={(lineName) => this.setState({lineName})}/>
             </View>
             <Divider style={{ backgroundColor: 'black'}} />
-            <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={[styles.halfWidth, {paddingRight: 10}]}>
-                    <Text style={{justifyContent: 'center', alignContent: 'center'}}>Players Selected</Text>
-                    <ScrollView>
-                        <List >
-                            {
-                                this.state.playersSelected.map((player, i) => (
-                                <ListItem
-                                    key={i}
-                                    title={player}
-                                    hideChevron={true}
-                                    onLongPress={() => {this.removePlayerFromLine(player)}}
-                                />
-                                ))
-                            }
-                        </List>
-                    </ScrollView>
-                </View>
-                <View style={[styles.halfWidth]}>
-                    <Text style={{justifyContent: 'center', alignContent: 'center'}}>Players Available</Text>
-                    <ScrollView>
-                        <List>
-                            {
-                                this.state.playersAvailable.map((player, i) => (
-                                <ListItem
-                                    key={i}
-                                    title={player}
-                                    hideChevron={true}
-                                    onPress={() => {this.addPlayerToLine(player)}}
-                                />
-                                ))
-                            }
-                        </List>
-                    </ScrollView>
-                </View>
-            </View>
+            <PlayerSelector 
+                playersSelected={this.state.playersSelected}
+                playersAvailable={this.state.playersAvailable}
+                updatePlayers={this.updatePlayers.bind(this)}
+            />
             <View style={{marginTop: 10}}>
                 <Button
                     raised
@@ -108,33 +78,9 @@ export class CreateLineScreen extends React.Component {
         );
     }
 
-    addPlayerToLine(player) {
-        let currentPlayersAvailable = this.state.playersAvailable.slice(),
-            currentPlayerIndex = currentPlayersAvailable.indexOf(player)
-        
-        currentPlayersAvailable.splice(currentPlayerIndex, 1)
-
+    updatePlayers(currentPlayersAvailable, currentPlayersSelected) {
         this.setState({playersAvailable : currentPlayersAvailable})
-
-        var currentPlayersSelected = this.state.playersSelected.concat(player)
-
-        currentPlayersSelected.sort()
         this.setState({playersSelected: currentPlayersSelected})
-    }
-
-    removePlayerFromLine(player) {
-        //TODO : should this ask to remove? or automatically remove?
-        let currentPlayersSelected = this.state.playersSelected.slice(),
-            currentPlayerIndex = currentPlayersSelected.indexOf(player)
-    
-        currentPlayersSelected.splice(currentPlayerIndex, 1)
-
-        this.setState({playersSelected : currentPlayersSelected})
-
-        var currentPlayersAvailable = this.state.playersAvailable.concat(player)
-
-        currentPlayersAvailable.sort()
-        this.setState({playersAvailable: currentPlayersAvailable})
     }
 
     saveLine() {

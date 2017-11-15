@@ -64,6 +64,7 @@ export class HomeScreen extends React.Component {
                                     buttonStyle={[{backgroundColor: '#02968A'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`Create New Game`}
+                                    disabled={true}
                                     onPress={() => console.log('Create New Game')}
                                 />
                             </View>
@@ -83,6 +84,7 @@ export class HomeScreen extends React.Component {
                                     icon={{name : 'people'}}
                                     buttonStyle={[{backgroundColor: '#9C28B0'}]}
                                     textStyle={{textAlign: 'center'}}
+                                    disabled={true}
                                     title={`Change Team`}
                                     onPress={() => console.log('Change Team')}
                                 />

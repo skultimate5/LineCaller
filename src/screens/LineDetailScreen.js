@@ -40,9 +40,10 @@ export class LineDetailScreen extends React.Component {
                     onPress: () => console.log('Edit Line'),
                 }}
             />
-            <View >
+            <View>
+                <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 10, marginTop: 5 }}>{this.state.line.name}</Text>
+
                 <ScrollView>
-                    <Text>{this.state.line.name}</Text>
                     <List>
                         {
                             this.state.line.players.map((player, i) => (
