@@ -67,7 +67,7 @@ export class CreateTeamScreen extends React.Component {
                     <View style={{marginTop: 10}}>
                         <Button
                             raised
-                            buttonStyle={[{backgroundColor: '#02968A'}, styles.button]}
+                            buttonStyle={[{backgroundColor: '#02968A'}]}
                             textStyle={{textAlign: 'center'}}
                             title={`Next`}
                             onPress={() => this.saveTeam()}
@@ -106,7 +106,7 @@ export class CreateTeamScreen extends React.Component {
         this.state.LocalStorage.setTeam(team.name, team)
         this.state.LocalStorage.setCurrentTeamName(team.name)
 
-        this.props.navigation.navigate('CreateLine', {team : team, players: team.players})
+        this.props.navigation.navigate('CreateLine', {team : team, players: team.players, fromCreateTeam: true})
     }
 }
 

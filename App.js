@@ -4,6 +4,7 @@ import { HomeScreen } from './src/screens/HomeScreen';
 import { CreateTeamScreen } from './src/screens/CreateTeamScreen';
 import { CreateLineScreen } from './src/screens/CreateLineScreen';
 import { ViewLinesScreen } from './src/screens/ViewLinesScreen';
+import { LineDetailScreen } from './src/screens/LineDetailScreen';
 
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -11,7 +12,8 @@ const LineCaller = StackNavigator({
   Home: {screen: HomeScreen},
   CreateTeam: {screen: CreateTeamScreen},
   CreateLine: {screen: CreateLineScreen},
-  ViewLines: {screen: ViewLinesScreen}
+  ViewLines: {screen: ViewLinesScreen},
+  LineDetail: {screen: LineDetailScreen}
 },
 {
   initialRouteName: 'Home',

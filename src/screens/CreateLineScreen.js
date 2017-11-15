@@ -20,7 +20,8 @@ export class CreateLineScreen extends React.Component {
             team: props.navigation.state.params.team,
             lineName: '',
             playersAvailable: props.navigation.state.params.players,
-            playersSelected: []
+            playersSelected: [],
+            fromCreateTeam: props.navigation.state.params.fromCreateTeam ? true: false
         }
         this.state.LocalStorage = new LocalStorage()
 
@@ -30,15 +31,29 @@ export class CreateLineScreen extends React.Component {
     render() {
         return (
         <View style={{flex : 1}}>
-            <Header
-                outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
-                leftComponent={{
-                    icon: 'home',
-                    color: '#fff',
-                    onPress: () => this.props.navigation.navigate('Home'),
-                }}
-                centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
-            />
+            {!this.state.fromCreateTeam && 
+                <Header
+                    outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
+                    leftComponent={{
+                        icon: 'arrow-back',
+                        color: '#fff',
+                        onPress: () => this.props.navigation.goBack(),
+                    }}
+                    centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
+                />
+            }
+            {this.state.fromCreateTeam && 
+                <Header
+                    outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
+                    leftComponent={{
+                        icon: 'home',
+                        color: '#fff',
+                        onPress: () => this.props.navigation.navigate('Home'),
+                    }}
+                    centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
+                />
+            }
+            
             <View style={{flex: 0.15}}>
                 <FormLabel>Line Name</FormLabel>
                 <FormInput value={this.state.lineName} onChangeText={(lineName) => this.setState({lineName})}/>
