@@ -1,7 +1,7 @@
 import React from 'react';
 import { AsyncStorage, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Button, Divider, FormLabel, FormInput, Header, List, ListItem } from 'react-native-elements'; 
+import { Button, Divider, FormLabel, FormInput, FormValidationMessage, Header, List, ListItem } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage';
 import PlayerSelector from '../components/playerSelector'
@@ -19,10 +19,12 @@ export class CreateLineScreen extends React.Component {
 
         this.state = {
             team: props.navigation.state.params.team,
-            lineName: '',
-            playersAvailable: props.navigation.state.params.players,
-            playersSelected: [],
-            fromCreateTeam: props.navigation.state.params.fromCreateTeam ? true: false
+            lineName:  props.navigation.state.params.line ? props.navigation.state.params.line.name : '',
+            playersAvailable: props.navigation.state.params.players ? props.navigation.state.params.players : props.navigation.state.params.playersAvailable,
+            playersSelected: props.navigation.state.params.playersSelected ? props.navigation.state.params.playersSelected : [],
+            fromCreateTeam: props.navigation.state.params.fromCreateTeam ? true : false,
+            fromLineDetailScreen: props.navigation.state.params.fromLineDetailScreen ? true : false,
+            sameNameError: false
         }
         this.state.LocalStorage = new LocalStorage()
 
@@ -32,7 +34,7 @@ export class CreateLineScreen extends React.Component {
     render() {
         return (
         <View style={{flex : 1}}>
-            {!this.state.fromCreateTeam && 
+            {!this.state.fromCreateTeam && !this.state.fromLineDetailScreen &&
                 <Header
                     outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                     leftComponent={{
@@ -41,6 +43,17 @@ export class CreateLineScreen extends React.Component {
                         onPress: () => this.props.navigation.goBack(),
                     }}
                     centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
+                />
+            }
+            {this.state.fromLineDetailScreen && 
+                <Header
+                    outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
+                    leftComponent={{
+                        icon: 'arrow-back',
+                        color: '#fff',
+                        onPress: () => this.props.navigation.goBack(),
+                    }}
+                    centerComponent={{ text: this.state.lineName, style: { color: '#fff', fontSize:20 } }} 
                 />
             }
             {this.state.fromCreateTeam && 
@@ -54,11 +67,14 @@ export class CreateLineScreen extends React.Component {
                     centerComponent={{ text: 'Create Line', style: { color: '#fff', fontSize:20 } }} 
                 />
             }
+            {!this.state.fromLineDetailScreen && 
+                <View style={{flex: 0.15, marginBottom: 15}}>
+                    <FormLabel>Line Name</FormLabel>
+                    <FormInput value={this.state.lineName} onChangeText={(lineName) => this.setState({lineName})}/>
+                    {this.state.sameNameError && <FormValidationMessage>This is the same name as another line</FormValidationMessage>}
+                </View>
+            }
             
-            <View style={{flex: 0.15}}>
-                <FormLabel>Line Name</FormLabel>
-                <FormInput value={this.state.lineName} onChangeText={(lineName) => this.setState({lineName})}/>
-            </View>
             <Divider style={{ backgroundColor: 'black'}} />
             <PlayerSelector 
                 playersSelected={this.state.playersSelected}
@@ -83,8 +99,9 @@ export class CreateLineScreen extends React.Component {
     lineIsValid() {
         // a line needs a name and 7 players
         return this.state.lineName != "" && 
-               this.state.playersSelected.length == 7
+               this.state.playersSelected.length >= 7
     }
+
     updatePlayers(currentPlayersAvailable, currentPlayersSelected) {
         this.setState({playersAvailable : currentPlayersAvailable})
         this.setState({playersSelected: currentPlayersSelected})
@@ -98,11 +115,32 @@ export class CreateLineScreen extends React.Component {
 
         let currentTeam = Object.assign({}, this.state.team)
 
-        currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
+        let sameIndex = -1,
+            error = false
 
-        this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+        currentTeam.lines.forEach((line, i) => {
+            if (this.state.lineName === line.name) {
+                if (this.state.fromLineDetailScreen) {
+                    sameIndex = i
+                }
+                else {
+                    error = true
+                    this.setState({sameNameError : true})
+                }
+            }
+        })
 
-        this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+        //Checking if need to update instead of add new line
+        if (!error && !this.state.fromLineDetailScreen) {
+            currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
+            this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+        }
+        else if (!error && this.state.fromLineDetailScreen) {
+            currentTeam.lines[sameIndex] = {name : this.state.lineName, players: this.state.playersSelected}     
+            this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+        }
     }
 }
 

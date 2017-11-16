@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation';
 import { Button, Divider, FormLabel, FormInput, Header, List, ListItem } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage';
+import PlayerSelector from '../components/playerSelector'
 
 export class LineDetailScreen extends React.Component {
     //This removes the react-navigation header
@@ -17,10 +18,29 @@ export class LineDetailScreen extends React.Component {
         super(props)
 
         this.state = {
-            line: props.navigation.state.params.line
+            currentTeamName: props.navigation.state.params.currentTeamName,
+            line: props.navigation.state.params.line,
+            playersAvailable: ['A'],
+            playersSelected: props.navigation.state.params.line.players,
+            team: {}
         }
 
         this.state.LocalStorage = new LocalStorage()
+        this.getTeamWithoutLine()
+    }
+
+    async getTeamWithoutLine() {
+        let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName),
+            players = team.players,
+            removePlayers = this.state.playersSelected
+
+        //remove players that are on this line already
+        players = players.filter((player) => {
+            return !removePlayers.includes(player)
+        })
+        
+        this.setState({team})
+        this.setState({playersAvailable : players})
     }
 
     render() {
@@ -33,32 +53,59 @@ export class LineDetailScreen extends React.Component {
                     color: '#fff',
                     onPress: () => this.props.navigation.goBack(),
                 }}
-                centerComponent={{ text: 'Name of Line', style: { color: '#fff', fontSize:20 } }} 
+                centerComponent={{ text: this.state.line.name, style: { color: '#fff', fontSize:20 } }} 
                 rightComponent={{
                     icon: 'edit',
                     color: '#fff',
-                    onPress: () => console.log('Edit Line'),
+                    onPress: () => this.props.navigation.navigate('CreateLine', {playersAvailable : this.state.playersAvailable, playersSelected : this.state.playersSelected, line : this.state.line, team : this.state.team, fromLineDetailScreen : true}),
+                    
                 }}
             />
-            <View>
-                <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 10, marginTop: 5 }}>{this.state.line.name}</Text>
-
-                <ScrollView>
-                    <List>
-                        {
-                            this.state.line.players.map((player, i) => (
-                                <ListItem
-                                    key={i}
-                                    title={player}
-                                    hideChevron={true}
-                                />
-                            ))
-                        }
-                    </List>
-                </ScrollView>
+            <View style={{flex : 1}}>
+                <View>
+                    <ScrollView>
+                        <List>
+                            {
+                                this.state.line.players.map((player, i) => (
+                                    <ListItem
+                                        key={i}
+                                        title={player}
+                                        hideChevron={true}
+                                    />
+                                ))
+                            }
+                        </List>
+                    </ScrollView>
+                </View>
+                <View style={styles.button}>
+                    <Button
+                        raised
+                        icon={{name : 'delete'}}
+                        buttonStyle={[{backgroundColor: '#cc0000'}]}
+                        textStyle={{textAlign: 'center'}}
+                        title={`Delete Line`}
+                        onPress={() => this.deleteLine()}
+                    />
+                </View>
             </View>
         </View>
         );
+    }
+
+    deleteLine() {
+        let index = -1,
+            currentTeam = Object.assign({}, this.state.team)
+
+        currentTeam.lines.forEach((line, i) => {
+            if (this.state.line.name === line.name) {
+                index = i
+            }
+        })
+
+        currentTeam.lines.splice(index, 1)    
+        this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+        this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+        
     }
 
 }
@@ -69,7 +116,8 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 25
     }
 });
 
