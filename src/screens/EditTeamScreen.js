@@ -145,7 +145,7 @@ export class EditTeamScreen extends React.Component {
         this.state.LocalStorage.setTeam(team.name, team)
         this.state.LocalStorage.setCurrentTeamName(team.name)
 
-        this.props.navigation.navigate('ViewTeam', {currentTeamName: this.state.currentTeamName})
+        this.props.navigation.navigate('Home', {currentTeamName: this.state.currentTeamName})
     }
 }
 
