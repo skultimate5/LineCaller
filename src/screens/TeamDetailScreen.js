@@ -56,14 +56,22 @@ export class TeamDetailScreen extends React.Component {
                         }
                     </List>
                 </ScrollView>
-                <View style={[styles.button, {marginTop: 10}]}>
+                <View style={[styles.button, {marginTop: 10, flexDirection: 'row'}]}>
                     <Button
                         raised
                         icon={{name : 'delete'}}
                         buttonStyle={[{backgroundColor: '#cc0000'}]}
                         textStyle={{textAlign: 'center'}}
-                        title={`Delete Line`}
+                        title={`Delete Team`}
                         onPress={() => this.deleteTeam()}
+                    />
+                    <Button
+                        raised
+                        icon={{name : 'bolt', type: 'font-awesome'}}
+                        buttonStyle={[{backgroundColor: '#8BC24A'}]}
+                        textStyle={{textAlign: 'center'}}
+                        title={`Make Current Team`}
+                        onPress={() => this.makeCurrentTeam()}
                     />
                 </View>
             </View>
@@ -71,19 +79,21 @@ export class TeamDetailScreen extends React.Component {
         );
     }
 
-    deleteTeam() {
-        // let index = -1,
-        //     currentTeam = Object.assign({}, this.state.team)
+    async deleteTeam() {
+        this.state.LocalStorage.removeTeam(this.state.team.name)
 
-        // currentTeam.lines.forEach((line, i) => {
-        //     if (this.state.line.name === line.name) {
-        //         index = i
-        //     }
-        // })
+        let currentTeamName = await this.state.LocalStorage.getCurrentTeamName()
 
-        // currentTeam.lines.splice(index, 1)    
-        // this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-        // this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+        if (this.state.team.name == currentTeamName) {
+            this.state.LocalStorage.setCurrentTeamName('')
+        }
+
+        this.props.navigation.navigate('Home')
+    }
+
+    makeCurrentTeam() {
+        this.state.LocalStorage.setCurrentTeamName(this.state.team.name)
+        this.props.navigation.navigate('Home')
     }
 }
 

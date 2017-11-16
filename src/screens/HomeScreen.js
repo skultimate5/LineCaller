@@ -33,9 +33,10 @@ export class HomeScreen extends React.Component {
         */
     }
     
-    componentDidMount() {
+    componentWillMount() {
         this.setState({isLoading : true})
         this.getCurrentTeamName()
+        this.getAllTeams()
     }
 
     async getCurrentTeamName() {
@@ -43,6 +44,14 @@ export class HomeScreen extends React.Component {
 
         this.setState({currentTeamName})
         this.setState({isLoading : false})
+    }
+
+    async getAllTeams() {
+        let teams = await this.state.LocalStorage.getAllTeams()
+
+        if (teams.length > 0) {
+            this.setState({hasStoredTeam : true})
+        }
     }
 
     checkIfRemoveData() {
@@ -136,18 +145,31 @@ export class HomeScreen extends React.Component {
                         </View>
                     }
                     {!this.state.isLoading && this.state.currentTeamName == null && 
-                        <View style={styles.button}>
-                            <Button
-                                raised
-                                icon={{name : 'people'}}
-                                buttonStyle={[{backgroundColor: '#02968A'}]}
-                                textStyle={{textAlign: 'center'}}
-                                title={`Create Team`}
-                                onPress={() => this.props.navigation.navigate('CreateTeam')}
-                            />
+                        <View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    icon={{name : 'people'}}
+                                    buttonStyle={[{backgroundColor: '#02968A'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Create Team`}
+                                    onPress={() => this.props.navigation.navigate('CreateTeam')}
+                                />
+                            </View>
+                            {this.state.hasStoredTeam && 
+                                <View style={styles.button}>
+                                    <Button
+                                        raised
+                                        icon={{name : 'people'}}
+                                        buttonStyle={[{backgroundColor: '#8BC24A'}]}
+                                        textStyle={{textAlign: 'center'}}
+                                        title={`View Teams`}
+                                        onPress={() => this.props.navigation.navigate('ViewTeam')}
+                                    />
+                                </View>
+                            }
                         </View>
                     }
-                    
                 </View>
             </View>
         </View>

@@ -51,7 +51,7 @@ export class ViewTeamScreen extends React.Component {
 						color: '#fff',
 						onPress: () => this.props.navigation.goBack()
 					}}
-					centerComponent={{ text: 'Change Team', style: { color: '#fff', fontSize:20 } }} 
+					centerComponent={{ text: 'View Teams', style: { color: '#fff', fontSize:20 } }} 
 				/>
 				<View>
                     {this.state.isLoading && <Text style={{ color: 'red', textAlign: 'center' }}>Loading</Text>}
