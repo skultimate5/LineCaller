@@ -99,7 +99,6 @@ export class CreateLineScreen extends React.Component {
         // a line needs a name and 7 players
         return this.state.lineName != "" && 
                this.state.playersSelected.length == 7
-
     }
 
     addPlayerToLine(player) {

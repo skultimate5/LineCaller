@@ -26,9 +26,11 @@ export class HomeScreen extends React.Component {
         //this.state.LocalStorage.removeAllTeams()
         //this.state.LocalStorage.removeCurrentTeamName()
 
+        /*
         this.state.LocalStorage.getAllTeams().then((items) => {
              console.log(items)
         })
+        */
     }
     
     componentDidMount() {
@@ -100,7 +102,7 @@ export class HomeScreen extends React.Component {
                                     buttonStyle={[{backgroundColor: '#9C28B0'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`Change Team`}
-                                    onPress={() => console.log('Change Team')}
+                                    onPress={() => this.props.navigation.navigate('ChangeTeam')}
                                 />
                             </View>
                             <View style={styles.button}>
