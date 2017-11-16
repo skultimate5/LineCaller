@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Button, Header } from 'react-native-elements'; 
 
@@ -44,6 +44,18 @@ export class HomeScreen extends React.Component {
         console.log(currentTeamName) 
         this.setState({currentTeamName})
         this.setState({isLoading : false})
+    }
+
+    checkIfRemoveData() {
+        Alert.alert(
+            'Hold on',
+            'Are you sure you want to delete all data?',
+            [
+              {text: 'Yes', onPress: () => this.removeData()},
+              {text: 'No', onPress: () => console.log('No')},
+            ],
+            { cancelable: false }
+        )
     }
 
     // remove the data 
@@ -121,7 +133,7 @@ export class HomeScreen extends React.Component {
                                     buttonStyle={[{backgroundColor: '#cc0000'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`Destroy Data `}
-                                    onPress={() => this.removeData()}
+                                    onPress={() => this.checkIfRemoveData()}
                                 />
                             </View>
                         </View>
