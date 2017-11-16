@@ -38,7 +38,7 @@ export class TeamDetailScreen extends React.Component {
                 rightComponent={{
                     icon: 'edit',
                     color: '#fff',
-                    //onPress: () => this.props.navigation.navigate('CreateLine', {playersAvailable : this.state.playersAvailable, playersSelected : this.state.playersSelected, line : this.state.line, team : this.state.team, fromLineDetailScreen : true}),
+                    onPress: () => this.props.navigation.navigate('EditTeam', {team : this.state.team})
                     
                 }}
             />
