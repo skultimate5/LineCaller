@@ -87,10 +87,20 @@ export class CreateLineScreen extends React.Component {
                     textStyle={{textAlign: 'center'}}
                     title={`Save Line`}
                     onPress={() => this.saveLine()}
+                    disabled={!this.lineIsValid()}
                 />
             </View>
         </View>
         );
+    }
+
+    // checks if the line is valid
+    lineIsValid() {
+        // a line needs a name and 7 players
+        return this.state.lineName !== undefined && 
+               this.state.lineName != "" && 
+               this.state.playersSelected.length == 7
+
     }
 
     addPlayerToLine(player) {
@@ -123,6 +133,11 @@ export class CreateLineScreen extends React.Component {
     }
 
     saveLine() {
+        console.log(this.state.lineName);
+        if (!this.state.lineName) {
+            console.log("what the fuck dude")
+        }
+
         let currentTeam = Object.assign({}, this.state.team)
 
         currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
