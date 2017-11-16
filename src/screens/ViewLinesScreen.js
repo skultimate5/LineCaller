@@ -23,10 +23,10 @@ export class ViewLinesScreen extends React.Component {
         }
 
         this.state.LocalStorage = new LocalStorage()
-        this.getLists()
+        this.getLines()
     }
 
-    async getLists() {
+    async getLines() {
         let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName)
 
         this.setState({team})
@@ -59,7 +59,7 @@ export class ViewLinesScreen extends React.Component {
                                     key={i}
                                     title={line.name}
                                     hideChevron={true}
-                                    onPress={() => {this.props.navigation.navigate('LineDetail', {line})}}
+                                    onPress={() => {this.props.navigation.navigate('LineDetail', {line, currentTeamName: this.state.currentTeamName})}}
                                 />
                             ))
                         }
