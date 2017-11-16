@@ -18,7 +18,8 @@ export class TeamDetailScreen extends React.Component {
         super(props)
 
         this.state = {
-            team: props.navigation.state.params.team
+            team: props.navigation.state.params.team,
+            currentTeamName: props.navigation.state.params.currentTeamName
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -38,7 +39,7 @@ export class TeamDetailScreen extends React.Component {
                 rightComponent={{
                     icon: 'edit',
                     color: '#fff',
-                    onPress: () => this.props.navigation.navigate('EditTeam', {team : this.state.team})
+                    onPress: () => this.props.navigation.navigate('EditTeam', {team : this.state.team, currentTeamName: this.state.currentTeamName})
                     
                 }}
             />
@@ -56,24 +57,38 @@ export class TeamDetailScreen extends React.Component {
                         }
                     </List>
                 </ScrollView>
-                <View style={[styles.button, {marginTop: 10, flexDirection: 'row'}]}>
-                    <Button
-                        raised
-                        icon={{name : 'delete'}}
-                        buttonStyle={[{backgroundColor: '#cc0000'}]}
-                        textStyle={{textAlign: 'center'}}
-                        title={`Delete Team`}
-                        onPress={() => this.deleteTeam()}
-                    />
-                    <Button
-                        raised
-                        icon={{name : 'bolt', type: 'font-awesome'}}
-                        buttonStyle={[{backgroundColor: '#8BC24A'}]}
-                        textStyle={{textAlign: 'center'}}
-                        title={`Make Current Team`}
-                        onPress={() => this.makeCurrentTeam()}
-                    />
-                </View>
+                {this.state.currentTeamName != this.state.team.name && 
+                    <View style={[styles.button, {marginTop: 10, flexDirection: 'row'}]}>
+                        <Button
+                            raised
+                            icon={{name : 'delete'}}
+                            buttonStyle={[{backgroundColor: '#cc0000'}]}
+                            textStyle={{textAlign: 'center'}}
+                            title={`Delete Team`}
+                            onPress={() => this.deleteTeam()}
+                        />
+                        <Button
+                            raised
+                            icon={{name : 'bolt', type: 'font-awesome'}}
+                            buttonStyle={[{backgroundColor: '#8BC24A'}]}
+                            textStyle={{textAlign: 'center'}}
+                            title={`Make Current Team`}
+                            onPress={() => this.makeCurrentTeam()}
+                        />
+                    </View>
+                }
+                {this.state.currentTeamName == this.state.team.name && 
+                    <View style={[styles.button, {marginTop: 10}]}>
+                        <Button
+                            raised
+                            icon={{name : 'delete'}}
+                            buttonStyle={[{backgroundColor: '#cc0000'}]}
+                            textStyle={{textAlign: 'center'}}
+                            title={`Delete Team`}
+                            onPress={() => this.deleteTeam()}
+                        />
+                    </View>
+                }
             </View>
         </View>
         );

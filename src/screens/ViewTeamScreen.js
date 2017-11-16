@@ -19,7 +19,8 @@ export class ViewTeamScreen extends React.Component {
 		// initialize all the teams on the device
 		this.state = { 
 			LocalStorage: new LocalStorage(),
-			teams: []
+			teams: [],
+			currentTeamName: props.navigation.state.params.currentTeamName
 		 };
 	}
 
@@ -64,7 +65,7 @@ export class ViewTeamScreen extends React.Component {
 									title={team.name}
 									hideChevron={true}
 									//onPress={() => {this.changeTeam(team)}}
-									onPress={() => this.props.navigation.navigate('TeamDetail', {team})}
+									onPress={() => this.props.navigation.navigate('TeamDetail', {team, currentTeamName: this.state.currentTeamName})}
 								/>
 							))
 						}

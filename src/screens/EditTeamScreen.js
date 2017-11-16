@@ -20,6 +20,7 @@ export class EditTeamScreen extends React.Component {
             team: props.navigation.state.params.team,
             currentPlayerName: '',
             players: props.navigation.state.params.team.players,
+            currentTeamName: props.navigation.state.params.currentTeamName,
             error: false,
             errorMessage: ""
         }
@@ -144,7 +145,7 @@ export class EditTeamScreen extends React.Component {
         this.state.LocalStorage.setTeam(team.name, team)
         this.state.LocalStorage.setCurrentTeamName(team.name)
 
-        this.props.navigation.navigate('ViewTeam')
+        this.props.navigation.navigate('ViewTeam', {currentTeamName: this.state.currentTeamName})
     }
 }
 
