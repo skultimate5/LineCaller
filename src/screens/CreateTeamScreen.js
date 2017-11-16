@@ -19,7 +19,9 @@ export class CreateTeamScreen extends React.Component {
         this.state = {
             currentPlayerName: '',
             players: [],
-            teamName: ''
+            teamName: '',
+            error: false,
+            errorMessage: ""
         }
         this.state.LocalStorage = new LocalStorage()
     }
@@ -50,7 +52,11 @@ export class CreateTeamScreen extends React.Component {
                         color='black'
                         onPress={() => this.addPlayer()} />
                     </View>
-
+                    {this.state.error &&
+                    <View>
+                        <Text style={{ color: 'red', textAlign: 'center' }}>{this.state.errorMessage}</Text>
+                    </View>
+                    }
                     <ScrollView>
                         <List containerStyle={{marginBottom: 20}} >
                             {
@@ -71,11 +77,18 @@ export class CreateTeamScreen extends React.Component {
                             textStyle={{textAlign: 'center'}}
                             title={`Next`}
                             onPress={() => this.saveTeam()}
+                            disabled={!this.teamIsValid()}
                         />
                     </View>
             </View>
         </View>
         );
+    }
+
+    // determines if the team is valid
+    teamIsValid() {
+        // team needs a name and at least 7 players
+        return this.state.teamName != "" && this.state.players.length > 6
     }
 
     renderFooter = () => {
@@ -86,14 +99,28 @@ export class CreateTeamScreen extends React.Component {
         )
     }
 
-
     addPlayer() {
-        //TODO : make sure no duplicate players
-        let currentPlayerName = this.state.currentPlayerName.trim(),
-            allPlayers = [currentPlayerName,...this.state.players]
+        name = this.state.currentPlayerName.trim().toLowerCase();
+        if (name == "") {    // don't want empty players
+            this.setState({
+                error: true, 
+                errorMessage: "Empty player name"
+            })
+        } else if (this.state.players.indexOf(name) != -1) {   // don't want duplicate players
+            this.setState({
+                error: true, 
+                errorMessage: "Duplicate player name"
+            })
+        } else {    // all is good
+            let currentPlayerName = name,
+                allPlayers = [currentPlayerName,...this.state.players]
 
-        this.setState({players: allPlayers})
-        this.setState({currentPlayerName: ''})
+            this.setState({
+                players: allPlayers,
+                currentPlayerName: '',
+                error: false
+            })
+        }
     }
 
     saveTeam() {
