@@ -97,8 +97,7 @@ export class CreateLineScreen extends React.Component {
     // checks if the line is valid
     lineIsValid() {
         // a line needs a name and 7 players
-        return this.state.lineName !== undefined && 
-               this.state.lineName != "" && 
+        return this.state.lineName != "" && 
                this.state.playersSelected.length == 7
 
     }
