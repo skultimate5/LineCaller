@@ -9,4 +9,7 @@ node_modules/
 # development testing
 .expo/
 
+# notes
+notes.md
+
 

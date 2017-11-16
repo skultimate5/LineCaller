@@ -41,7 +41,6 @@ export class HomeScreen extends React.Component {
     async getCurrentTeamName() {
         let currentTeamName = await this.state.LocalStorage.getCurrentTeamName()
 
-        console.log(currentTeamName) 
         this.setState({currentTeamName})
         this.setState({isLoading : false})
     }
@@ -56,8 +55,6 @@ export class HomeScreen extends React.Component {
             hasStoredTeam: false,
             isLoading: false
         });
-
-        console.log("current team name: " + currentTeamName)
     }
 
     render() {
