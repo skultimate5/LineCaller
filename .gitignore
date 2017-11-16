@@ -1,6 +1,12 @@
-node_modules/
-.expo/
+# react stuff?
 npm-debug.*
 jsconfig.json
+
+# packages 
+package-lock.json
+node_modules/
+
+# development testing
+.expo/
 
 
