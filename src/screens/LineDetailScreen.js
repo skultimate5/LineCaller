@@ -5,7 +5,7 @@ import { Button, Divider, FormLabel, FormInput, Header, List, ListItem } from 'r
 
 import LocalStorage from '../storage/LocalStorage';
 
-export class ViewLinesScreen extends React.Component {
+export class LineDetailScreen extends React.Component {
     //This removes the react-navigation header
     static navigationOptions = {
         title: 'Home',
@@ -17,20 +17,10 @@ export class ViewLinesScreen extends React.Component {
         super(props)
 
         this.state = {
-            currentTeamName: props.navigation.state.params.currentTeamName,
-            team: {},
-            lines: []
+            line: props.navigation.state.params.line
         }
 
         this.state.LocalStorage = new LocalStorage()
-        this.getLists()
-    }
-
-    async getLists() {
-        let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName)
-
-        this.setState({team})
-        this.setState({lines: team.lines})
     }
 
     render() {
@@ -39,27 +29,28 @@ export class ViewLinesScreen extends React.Component {
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
-                    icon: 'home',
+                    icon: 'arrow-back',
                     color: '#fff',
-                    onPress: () => this.props.navigation.navigate('Home'),
+                    onPress: () => this.props.navigation.goBack(),
                 }}
-                centerComponent={{ text: 'Lines', style: { color: '#fff', fontSize:20 } }} 
+                centerComponent={{ text: 'Name of Line', style: { color: '#fff', fontSize:20 } }} 
                 rightComponent={{
-                    icon: 'add',
+                    icon: 'edit',
                     color: '#fff',
-                    onPress: () => this.props.navigation.navigate('CreateLine', {team : this.state.team, players: this.state.team.players}),
+                    onPress: () => console.log('Edit Line'),
                 }}
             />
-            <View >
+            <View>
+                <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 10, marginTop: 5 }}>{this.state.line.name}</Text>
+
                 <ScrollView>
                     <List>
                         {
-                            this.state.lines.map((line, i) => (
+                            this.state.line.players.map((player, i) => (
                                 <ListItem
                                     key={i}
-                                    title={line.name}
+                                    title={player}
                                     hideChevron={true}
-                                    onPress={() => {this.props.navigation.navigate('LineDetail', {line})}}
                                 />
                             ))
                         }
