@@ -49,7 +49,7 @@ export default class PlayerSelector extends Component {
                                     key={i}
                                     title={player}
                                     hideChevron={true}
-                                    onLongPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
+                                    onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
                                 />
                                 ))
                             }
@@ -67,7 +67,6 @@ export default class PlayerSelector extends Component {
                                     key={i}
                                     title={player}
                                     hideChevron={true}
-                                    //onPress={() => {addPlayerToLine(player)}}
                                     onPress={() => {this.addPlayer(player, playersAvailable, playersSelected, updatePlayers)}}
                                     
                                 />
