@@ -62,22 +62,20 @@ export class LineDetailScreen extends React.Component {
                 }}
             />
             <View style={{flex : 1}}>
-                <View>
-                    <ScrollView>
-                        <List>
-                            {
-                                this.state.line.players.map((player, i) => (
-                                    <ListItem
-                                        key={i}
-                                        title={player}
-                                        hideChevron={true}
-                                    />
-                                ))
-                            }
-                        </List>
-                    </ScrollView>
-                </View>
-                <View style={styles.button}>
+                <ScrollView>
+                    <List>
+                        {
+                            this.state.line.players.map((player, i) => (
+                                <ListItem
+                                    key={i}
+                                    title={player}
+                                    hideChevron={true}
+                                />
+                            ))
+                        }
+                    </List>
+                </ScrollView>
+                <View style={[styles.button, {marginTop: 10}]}>
                     <Button
                         raised
                         icon={{name : 'delete'}}

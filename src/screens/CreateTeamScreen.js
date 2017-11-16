@@ -45,12 +45,12 @@ export class CreateTeamScreen extends React.Component {
                     <FormInput value={this.state.currentPlayerName} onChangeText={(currentPlayerName) => this.setState({currentPlayerName})}/>
                     
                     <View style={[styles.icon, {paddingTop: 20}]}>
-                    <Icon
-                        raised
-                        name='add-user'
-                        type='entypo'
-                        color='black'
-                        onPress={() => this.addPlayer()} />
+                        <Icon
+                            raised
+                            name='add-user'
+                            type='entypo'
+                            color='black'
+                            onPress={() => this.addPlayer()} />
                     </View>
                     {this.state.error &&
                     <View>
@@ -70,7 +70,7 @@ export class CreateTeamScreen extends React.Component {
                             }
                         </List>
                     </ScrollView>
-                    <View style={{marginTop: 10}}>
+                    <View style={[styles.button, {marginTop: 10}]}>
                         <Button
                             raised
                             buttonStyle={[{backgroundColor: '#02968A'}]}
@@ -89,14 +89,6 @@ export class CreateTeamScreen extends React.Component {
     teamIsValid() {
         // team needs a name and at least 7 players
         return this.state.teamName != "" && this.state.players.length > 6
-    }
-
-    renderFooter = () => {
-        return (
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Show unlinked tags</Text>
-          </View>
-        )
     }
 
     addPlayer() {
@@ -150,9 +142,8 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 10,
-        marginLeft: 60,
-        marginRight: 60,
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 25
     }
 });
 
