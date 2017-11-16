@@ -106,7 +106,7 @@ export class HomeScreen extends React.Component {
                             <View style={styles.button}>
                                 <Button
                                     raised
-                                    icon={{name : 'people'}}
+                                    icon={{name : 'nature-people'}}
                                     buttonStyle={[{backgroundColor: '#9C28B0'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`Create Team`}
@@ -119,14 +119,14 @@ export class HomeScreen extends React.Component {
                                     icon={{name : 'people'}}
                                     buttonStyle={[{backgroundColor: '#9C28B0'}]}
                                     textStyle={{textAlign: 'center'}}
-                                    title={`View Teams`}
+                                    title={`Change Current Team`}
                                     onPress={() => this.props.navigation.navigate('ViewTeam')}
                                 />
                             </View>
                             <View style={styles.button}>
                                 <Button
                                     raised
-                                    icon={{name : 'people'}}
+                                    icon={{name : 'delete'}}
                                     buttonStyle={[{backgroundColor: '#cc0000'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`Destroy Data `}
