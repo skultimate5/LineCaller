@@ -48,8 +48,6 @@ export class HomeScreen extends React.Component {
 
     // remove the data 
     async removeData() {
-        console.log("destroying data");
-
         this.state.LocalStorage.removeAllTeams();
         await this.state.LocalStorage.removeCurrentTeamName();
         let currentTeamName = await this.state.LocalStorage.getCurrentTeamName();
@@ -111,8 +109,8 @@ export class HomeScreen extends React.Component {
                                     icon={{name : 'people'}}
                                     buttonStyle={[{backgroundColor: '#9C28B0'}]}
                                     textStyle={{textAlign: 'center'}}
-                                    title={`Change Team`}
-                                    onPress={() => this.props.navigation.navigate('ChangeTeam')}
+                                    title={`View Teams`}
+                                    onPress={() => this.props.navigation.navigate('ViewTeam')}
                                 />
                             </View>
                             <View style={styles.button}>

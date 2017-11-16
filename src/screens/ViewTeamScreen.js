@@ -4,8 +4,9 @@ import { Header, List, ListItem } from 'react-native-elements';
 
 import LocalStorage from '../storage/LocalStorage.js';
 
-export class ChangeTeamScreen extends React.Component {
+export class ViewTeamScreen extends React.Component {
 
+	// allows for custom navigation?
 	static navigationOptions = {
 		title: "This doesn't seem to matter",
 		headerLeft: null,
@@ -64,6 +65,7 @@ export class ChangeTeamScreen extends React.Component {
 								<ListItem
 									key={i}
 									title={team.name}
+									hideChevron={true}
 									onPress={() => {this.changeTeam(team)}}
 								/>
 							))
