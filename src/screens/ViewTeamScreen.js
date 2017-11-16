@@ -63,7 +63,8 @@ export class ViewTeamScreen extends React.Component {
 									key={i}
 									title={team.name}
 									hideChevron={true}
-									onPress={() => {this.changeTeam(team)}}
+									//onPress={() => {this.changeTeam(team)}}
+									onPress={() => this.props.navigation.navigate('TeamDetail', {team})}
 								/>
 							))
 						}
