@@ -23,12 +23,12 @@ export class HomeScreen extends React.Component {
             LocalStorage: new LocalStorage()
         }
 
-        // this.state.LocalStorage.removeAllTeams()
-        // this.state.LocalStorage.removeCurrentTeamName()
+        //this.state.LocalStorage.removeAllTeams()
+        //this.state.LocalStorage.removeCurrentTeamName()
 
-        // this.state.LocalStorage.getAllTeams().then((items) => {
-        //     console.log(items)
-        // })
+        this.state.LocalStorage.getAllTeams().then((items) => {
+             console.log(items)
+        })
     }
     
     componentDidMount() {
@@ -42,6 +42,22 @@ export class HomeScreen extends React.Component {
         console.log(currentTeamName) 
         this.setState({currentTeamName})
         this.setState({isLoading : false})
+    }
+
+    // remove the data 
+    async removeData() {
+        console.log("destroying data");
+
+        this.state.LocalStorage.removeAllTeams();
+        await this.state.LocalStorage.removeCurrentTeamName();
+        let currentTeamName = await this.state.LocalStorage.getCurrentTeamName();
+        this.setState({
+            currentTeamName: currentTeamName,
+            hasStoredTeam: false,
+            isLoading: false
+        });
+
+        console.log("current team name: " + currentTeamName)
     }
 
     render() {
@@ -85,6 +101,16 @@ export class HomeScreen extends React.Component {
                                     textStyle={{textAlign: 'center'}}
                                     title={`Change Team`}
                                     onPress={() => console.log('Change Team')}
+                                />
+                            </View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    icon={{name : 'people'}}
+                                    buttonStyle={[{backgroundColor: '#cc0000'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Destroy Data `}
+                                    onPress={() => this.removeData()}
                                 />
                             </View>
                         </View>
