@@ -31,11 +31,8 @@ export class ViewTeamScreen extends React.Component {
 
 	// get the teams and tell the component it is not loading
 	async getTeams() {
-		console.log('getting teams')
 		this.state.teams = await this.state.LocalStorage.getAllTeams();
 		this.setState( {isLoading: false });
-		console.log('got teams')
-		console.log(this.state.teams)
 	}
 
 	// changes the team and returns to the home screen
