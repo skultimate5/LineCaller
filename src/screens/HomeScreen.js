@@ -117,9 +117,9 @@ export class HomeScreen extends React.Component {
                                 <Button
                                     raised
                                     icon={{name : 'people'}}
-                                    buttonStyle={[{backgroundColor: '#9C28B0'}]}
+                                    buttonStyle={[{backgroundColor: '#8BC24A'}]}
                                     textStyle={{textAlign: 'center'}}
-                                    title={`Change Current Team`}
+                                    title={`View Teams`}
                                     onPress={() => this.props.navigation.navigate('ViewTeam')}
                                 />
                             </View>
