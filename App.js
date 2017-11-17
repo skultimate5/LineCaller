@@ -8,6 +8,8 @@ import { ViewLinesScreen } from './src/screens/ViewLinesScreen';
 import { LineDetailScreen } from './src/screens/LineDetailScreen';
 import { TeamDetailScreen } from './src/screens/TeamDetailScreen';
 import { EditTeamScreen } from './src/screens/EditTeamScreen';
+import { CreateNewGameScreen } from './src/screens/CreateNewGameScreen';
+
 
 
 import { StyleSheet, Text, View } from 'react-native';
@@ -20,8 +22,8 @@ const LineCaller = StackNavigator({
   ViewLines: {screen: ViewLinesScreen},
   LineDetail: {screen: LineDetailScreen},
   TeamDetail: {screen: TeamDetailScreen},
-  EditTeam: {screen: EditTeamScreen}
-  
+  EditTeam: {screen: EditTeamScreen},
+  CreateNewGame: {screen: CreateNewGameScreen}
 },
 {
   initialRouteName: 'Home',
