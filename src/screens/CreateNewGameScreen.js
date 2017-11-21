@@ -87,7 +87,7 @@ export class CreateNewGameScreen extends React.Component {
 
         this.state.LocalStorage.setCurrentGame(game)
 
-        this.props.navigation.navigate('GameOverview', {game})
+        this.props.navigation.navigate('GameOverview', {game, currentTeamName: this.state.currentTeamName})
     
     }
 

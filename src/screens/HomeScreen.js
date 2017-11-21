@@ -128,7 +128,7 @@ export class HomeScreen extends React.Component {
                                         textStyle={{textAlign: 'center'}}
                                         title={`Current Game`}
                                         //disabled={true}
-                                        onPress={() => this.props.navigation.navigate('GameOverview', {game : this.state.currentGame})}                                    
+                                        onPress={() => this.props.navigation.navigate('GameOverview', {game : this.state.currentGame, currentTeamName: this.state.currentTeamName})}                                    
                                     />
                                 }
                             </View>

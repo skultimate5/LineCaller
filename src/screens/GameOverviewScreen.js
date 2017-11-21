@@ -1,7 +1,7 @@
 import React from 'react';
 import { AsyncStorage, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Button, ButtonGroup, FormLabel, FormInput, Header } from 'react-native-elements'; 
+import { Button, ButtonGroup, FormLabel, FormInput, Header, Icon } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage.js';
 
@@ -19,7 +19,8 @@ export class GameOverviewScreen extends React.Component {
         console.log(props)
 
         this.state = {
-            game : props.navigation.state.params.game
+            game : props.navigation.state.params.game,
+            currentTeamName : props.navigation.state.params.currentTeamName
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -40,13 +41,23 @@ export class GameOverviewScreen extends React.Component {
             <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row'}}>
                     <View style={{flex: 0.5}}>
+                        <Text>{this.state.currentTeamName}</Text>
+                        <Text>{this.state.game.teamScore}</Text>
+                        <Icon
+                            raised
+                            name='add'
+                            color='#f50'
+                            onPress={() => console.log('add')} />
+                    </View>  
+                    <View style={{flex: 0.5}}>
                         <Text>{this.state.game.opponent}</Text>
                         <Text>{this.state.game.oppScore}</Text>
-                    </View> 
-                    <View style={{flex: 0.5}}>
-                        <Text> This team </Text>
-                        <Text>{this.state.game.teamScore}</Text>
-                    </View>                       
+                        <Icon
+                            raised
+                            name='add'
+                            color='#f50'
+                            onPress={() => console.log('add')} />
+                    </View>                      
                 </View>    
                         
 
