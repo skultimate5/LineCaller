@@ -31,8 +31,8 @@ export class GameOverviewScreen extends React.Component {
             lineSelectedIndex : 0,
             isModalVisible : false,
             playing : false,
-            onD : props.navigation.state.params.startedOn == 'D' ? true : false,
-            oOrDWord : props.navigation.state.params.startedOn == 'D' ? 'Defense' : 'Offense'
+            onD : props.navigation.state.params.game.startedOn == 'D' ? true : false,
+            oOrDWord : props.navigation.state.params.game.startedOn == 'D' ? 'Defense' : 'Offense'
         }
 
         this.state.LocalStorage = new LocalStorage()
