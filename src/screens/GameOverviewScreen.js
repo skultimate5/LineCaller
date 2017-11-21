@@ -1,9 +1,10 @@
 import React from 'react';
-import { AsyncStorage, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Picker, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Button, ButtonGroup, FormLabel, FormInput, Header, Icon } from 'react-native-elements'; 
+import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage.js';
+import PlayerSelector from '../components/playerSelector'
 
 export class GameOverviewScreen extends React.Component {
     //This removes the react-navigation header
@@ -20,15 +21,36 @@ export class GameOverviewScreen extends React.Component {
 
         this.state = {
             game : props.navigation.state.params.game,
-            currentTeamName : props.navigation.state.params.currentTeamName
+            currentTeamName : props.navigation.state.params.currentTeamName,
+            playersSelected : [],
+            playersAvailable : [],
+            lines : [],
+            currentTeam: {},
+            lineSelectedIndex : 0
         }
 
         this.state.LocalStorage = new LocalStorage()
     }
 
+    componentWillMount() {
+        this.getTeam()
+    }
+
+    async getTeam() {
+        let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName),
+            lines = team.lines,
+            players = team.players
+        
+        //put All players in first index of lines array
+        lines.unshift({name : 'All', players : players})
+        this.setState({currentTeam : team, lines : lines, playersAvailable : players})
+        console.log(this.state)
+    }
+
     render() {
         return (
-        <View style={styles.container}>
+        //<View style={styles.container}>
+        <View style={{flex: 1}}>        
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
@@ -40,7 +62,7 @@ export class GameOverviewScreen extends React.Component {
             />
             <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row'}}>
-                    <View style={{flex: 0.5}}>
+                    <View style={{flex: 0.5, alignItems: 'center', justifyContent: 'center'}}>
                         <Text>{this.state.currentTeamName}</Text>
                         <Text>{this.state.game.teamScore}</Text>
                         <Icon
@@ -49,31 +71,69 @@ export class GameOverviewScreen extends React.Component {
                             color='#f50'
                             onPress={() => console.log('add')} />
                     </View>  
-                    <View style={{flex: 0.5}}>
+                    <View style={{flex: 0.5, alignItems: 'center',  justifyContent: 'center'}}>
                         <Text>{this.state.game.opponent}</Text>
                         <Text>{this.state.game.oppScore}</Text>
                         <Icon
+                            //containerStyle={{marginLeft: 50}}
                             raised
                             name='add'
                             color='#f50'
                             onPress={() => console.log('add')} />
                     </View>                      
-                </View>    
-                        
+                </View>
 
-                    <View style={[styles.button, {marginTop: 10}]}>
-                        <Button
-                            raised
-                            buttonStyle={[{backgroundColor: '#02968A'}]}
-                            textStyle={{textAlign: 'center'}}
-                            title={`New Point`}
-                            //onPress={() => this.saveAndStartGame()}
-                            //disabled={!this.teamIsValid()}
-                        />
-                    </View>
+                <View style={[styles.button, {marginTop: 10}]}>
+                    <Button
+                        raised
+                        buttonStyle={[{backgroundColor: '#02968A'}]}
+                        textStyle={{textAlign: 'center'}}
+                        title={`Start Point`}
+                        //onPress={() => this.saveAndStartGame()}
+                        //disabled={!this.teamIsValid()}
+                    />
+                </View>
+
+                <Picker
+                    selectedValue={this.state.lineSelectedIndex}
+                    onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
+                    {this.state.lines.map((line, index) => {
+                        return (
+                            <Picker.Item label={line.name} value={index} key={index}/>
+                        ) 
+                    })}
+                </Picker>
+
+                    <Divider style={{ backgroundColor: 'black'}} />
+                    <PlayerSelector 
+                        playersSelected={this.state.playersSelected}
+                        playersAvailable={this.state.playersAvailable}
+                        updatePlayers={this.updatePlayers.bind(this)}
+                    />    
+                        
             </View>
         </View>
         );
+    }
+
+    updateLineShown(itemIndex) {
+        //Remove players that have already been selected from the playersAvailable
+        let playersInSelectedLine = this.state.lines[itemIndex].players,
+            playersSelected = this.state.playersSelected.slice()
+
+        var filteredPlayers = playersInSelectedLine.filter((player) => {
+            if (playersSelected.indexOf(player) < 0) {
+                return player
+            }
+        })
+
+        this.setState({lineSelectedIndex: itemIndex})
+        this.setState({playersAvailable : filteredPlayers})
+    }
+
+    updatePlayers(currentPlayersAvailable, currentPlayersSelected) {
+        this.setState({playersAvailable : currentPlayersAvailable})
+        this.setState({playersSelected: currentPlayersSelected})
     }
 
     saveAndStartGame() {
