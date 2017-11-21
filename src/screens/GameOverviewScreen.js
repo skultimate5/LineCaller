@@ -1,7 +1,7 @@
 import React from 'react';
-import { Picker, StyleSheet, Text, View } from 'react-native';
-import { ScrollView, StackNavigator } from 'react-navigation';
-import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon } from 'react-native-elements';
+import { Picker, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon, List, ListItem } from 'react-native-elements';
 import Modal from 'react-native-modal'
 
 
@@ -88,6 +88,25 @@ export class GameOverviewScreen extends React.Component {
                             onPress={() => console.log('add')} /> }
                     </View>                      
                 </View>
+
+                {this.state.playing &&
+                    <View style={{flex : 1}}>
+                        <ScrollView>
+                            <List>
+                                {
+                                    this.state.playersSelected.map((player, i) => (
+                                    <ListItem
+                                        key={i}
+                                        title={player}
+                                        hideChevron={true}
+                                        //onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
+                                    />
+                                    ))
+                                }
+                            </List>
+                        </ScrollView>
+                    </View>
+                }
 
                 {!this.state.playing && 
                 <View style={{flex : 1}}>
