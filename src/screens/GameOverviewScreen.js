@@ -1,10 +1,13 @@
 import React from 'react';
 import { Picker, StyleSheet, Text, View } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon } from 'react-native-elements'; 
+import { ScrollView, StackNavigator } from 'react-navigation';
+import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon } from 'react-native-elements';
+
 
 import LocalStorage from '../storage/LocalStorage.js';
 import PlayerSelector from '../components/playerSelector'
+import FormPicker from '../components/formPicker'
+
 
 export class GameOverviewScreen extends React.Component {
     //This removes the react-navigation header
@@ -94,15 +97,6 @@ export class GameOverviewScreen extends React.Component {
                     />
                 </View>
 
-                <Picker
-                    selectedValue={this.state.lineSelectedIndex}
-                    onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
-                    {this.state.lines.map((line, index) => {
-                        return (
-                            <Picker.Item label={line.name} value={index} key={index}/>
-                        ) 
-                    })}
-                </Picker>
 
                     <Divider style={{ backgroundColor: 'black'}} />
                     <PlayerSelector 
@@ -110,6 +104,22 @@ export class GameOverviewScreen extends React.Component {
                         playersAvailable={this.state.playersAvailable}
                         updatePlayers={this.updatePlayers.bind(this)}
                     />    
+
+                    <Divider style={{ backgroundColor: 'black'}} />
+                    {/* <Picker
+                    selectedValue={this.state.lineSelectedIndex}
+                    onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
+                    {this.state.lines.map((line, index) => {
+                        return (
+                            <Picker.Item label={line.name} value={index} key={index}/>
+                        ) 
+                    })}
+                    </Picker> */}
+                    <FormPicker
+                        items={this.state.lines}
+                        value={this.state.lineSelectedIndex}
+                        onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}
+                    />
                         
             </View>
         </View>
