@@ -31,7 +31,8 @@ export class GameOverviewScreen extends React.Component {
             lineSelectedIndex : 0,
             isModalVisible : false,
             playing : false,
-            onD : props.navigation.state.params.startedOn == 'D' ? true : false
+            onD : props.navigation.state.params.startedOn == 'D' ? true : false,
+            oOrDWord : props.navigation.state.params.startedOn == 'D' ? 'Defense' : 'Offense'
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -55,15 +56,15 @@ export class GameOverviewScreen extends React.Component {
         return (
         //<View style={styles.container}>
         <View style={{flex: 1}}>        
-            <Header
+            {this.state.oOrDWord && <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
                     icon: 'home',
                     color: '#fff',
                     onPress: () => this.props.navigation.navigate('Home'),
                 }}
-                centerComponent={{ text: 'Game Overview', style: { color: '#fff', fontSize:20 } }} 
-            />
+                centerComponent={{ text: `Playing ${this.state.oOrDWord}`, style: { color: '#fff', fontSize:20 } }} 
+            />}
             <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row'}}>
                     <View style={{flex: 0.5, alignItems: 'center', justifyContent: 'center'}}>
@@ -182,7 +183,12 @@ export class GameOverviewScreen extends React.Component {
         
         team == 'currentTeam' ? game.teamScore++ : game.oppScore++
         game.lines.push(line)
-        this.setState({game, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false, onD : !this.state.onD})
+
+        let onD = team == 'currentTeam' ? true : false
+        let oOrDWord = onD ? 'Defense' : 'Offense'
+        
+
+        this.setState({game, onD, oOrDWord, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false})
         this.state.LocalStorage.setCurrentGame(game)
     }
 
