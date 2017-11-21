@@ -21,8 +21,6 @@ export class GameOverviewScreen extends React.Component {
     constructor(props) {
         super(props)
 
-        console.log(props)
-
         this.state = {
             game : props.navigation.state.params.game,
             currentTeamName : props.navigation.state.params.currentTeamName,
@@ -32,7 +30,8 @@ export class GameOverviewScreen extends React.Component {
             currentTeam: {},
             lineSelectedIndex : 0,
             isModalVisible : false,
-            playing : false
+            playing : false,
+            onD : props.navigation.state.params.startedOn == 'D' ? true : false
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -50,7 +49,6 @@ export class GameOverviewScreen extends React.Component {
         //put All players in first index of lines array
         lines.unshift({name : 'All', players : players})
         this.setState({currentTeam : team, lines : lines, playersAvailable : players})
-        console.log(this.state)
     }
 
     render() {
@@ -75,7 +73,7 @@ export class GameOverviewScreen extends React.Component {
                             raised
                             name='add'
                             color='#f50'
-                            onPress={() => console.log('add')} /> }
+                            onPress={() => this.pointScored('currentTeam')} /> }
                     </View>  
                     <View style={{flex: 0.5, alignItems: 'center',  justifyContent: 'center'}}>
                         <Text>{this.state.game.opponent}</Text>
@@ -85,7 +83,7 @@ export class GameOverviewScreen extends React.Component {
                             raised
                             name='add'
                             color='#f50'
-                            onPress={() => console.log('add')} /> }
+                            onPress={() => this.pointScored('oppTeam')} /> }
                     </View>                      
                 </View>
 
@@ -116,7 +114,7 @@ export class GameOverviewScreen extends React.Component {
                             buttonStyle={[{backgroundColor: '#02968A'}]}
                             textStyle={{textAlign: 'center'}}
                             title={`Start Point`}
-                            onPress={() => this.saveAndStartGame()}
+                            onPress={() => this._startPlaying()}
                             disabled={!this.validPlayers()}
                         />
                     </View>
@@ -131,13 +129,16 @@ export class GameOverviewScreen extends React.Component {
 
                     <Divider style={{ backgroundColor: 'black'}} />
                     <View>
-                        <Button
-                            raised
-                            buttonStyle={[{backgroundColor: '#02968A'}]}
-                            textStyle={{textAlign: 'center'}}
-                            title={`Choose Line`}
-                            onPress={() => this._showModal()}
-                        />
+                        <View style={{flexDirection: 'row'}}>
+                            <Button
+                                raised
+                                buttonStyle={[{backgroundColor: '#02968A'}]}
+                                textStyle={{textAlign: 'center'}}
+                                title={`Choose Line`}
+                                onPress={() => this._showModal()}
+                            />
+                            {this.state.lines[this.state.lineSelectedIndex] && <Text>{this.state.lines[this.state.lineSelectedIndex].name} Selected</Text>}
+                        </View>
                         <Modal style={styles.bottomModal} backdropColor={'white'} backdropOpacity={0.7}
                             isVisible={this.state.isModalVisible} onBackdropPress={() => this._hideModal()}>
                             <View>
@@ -166,9 +167,23 @@ export class GameOverviewScreen extends React.Component {
         );
     }
 
-    saveAndStartGame() {
-        console.log('play')
+    _startPlaying() {
         this.setState({playing : true})
+    }
+
+    pointScored(team) {
+        let game = Object.assign({}, this.state.game),
+            line = {
+                name: this.state.lines[this.state.lineSelectedIndex].name, 
+                players: [this.state.playersSelected], 
+                onD: this.state.onD, 
+                scored: team == 'currentTeam' ? true : false
+            }
+        
+        team == 'currentTeam' ? game.teamScore++ : game.oppScore++
+        game.lines.push(line)
+        this.setState({game, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false, onD : !this.state.onD})
+        this.state.LocalStorage.setCurrentGame(game)
     }
 
     validPlayers() {
