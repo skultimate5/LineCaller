@@ -31,7 +31,8 @@ export class GameOverviewScreen extends React.Component {
             lines : [],
             currentTeam: {},
             lineSelectedIndex : 0,
-            isModalVisible : false
+            isModalVisible : false,
+            playing : false
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -70,34 +71,36 @@ export class GameOverviewScreen extends React.Component {
                     <View style={{flex: 0.5, alignItems: 'center', justifyContent: 'center'}}>
                         <Text>{this.state.currentTeamName}</Text>
                         <Text>{this.state.game.teamScore}</Text>
-                        <Icon
+                        {this.state.playing && <Icon
                             raised
                             name='add'
                             color='#f50'
-                            onPress={() => console.log('add')} />
+                            onPress={() => console.log('add')} /> }
                     </View>  
                     <View style={{flex: 0.5, alignItems: 'center',  justifyContent: 'center'}}>
                         <Text>{this.state.game.opponent}</Text>
                         <Text>{this.state.game.oppScore}</Text>
-                        <Icon
+                        {this.state.playing && <Icon
                             //containerStyle={{marginLeft: 50}}
                             raised
                             name='add'
                             color='#f50'
-                            onPress={() => console.log('add')} />
+                            onPress={() => console.log('add')} /> }
                     </View>                      
                 </View>
 
-                <View style={[styles.button, {marginTop: 10}]}>
-                    <Button
-                        raised
-                        buttonStyle={[{backgroundColor: '#02968A'}]}
-                        textStyle={{textAlign: 'center'}}
-                        title={`Start Point`}
-                        //onPress={() => this.saveAndStartGame()}
-                        //disabled={!this.teamIsValid()}
-                    />
-                </View>
+                {!this.state.playing && 
+                <View style={{flex : 1}}>
+                    <View style={[styles.button, {marginTop: 10}]}>
+                        <Button
+                            raised
+                            buttonStyle={[{backgroundColor: '#02968A'}]}
+                            textStyle={{textAlign: 'center'}}
+                            title={`Start Point`}
+                            onPress={() => this.saveAndStartGame()}
+                            disabled={!this.validPlayers()}
+                        />
+                    </View>
 
 
                     <Divider style={{ backgroundColor: 'black'}} />
@@ -115,7 +118,6 @@ export class GameOverviewScreen extends React.Component {
                             textStyle={{textAlign: 'center'}}
                             title={`Choose Line`}
                             onPress={() => this._showModal()}
-                            //disabled={!this.teamIsValid()}
                         />
                         <Modal style={styles.bottomModal} backdropColor={'white'} backdropOpacity={0.7}
                             isVisible={this.state.isModalVisible} onBackdropPress={() => this._hideModal()}>
@@ -135,16 +137,23 @@ export class GameOverviewScreen extends React.Component {
                                     textStyle={{textAlign: 'center'}}
                                     title={`Close`}
                                     onPress={() => this._hideModal()}
-                                    //disabled={!this.teamIsValid()}
                                 />
                             </View>
                         </Modal>
                     </View>
-                    
-                        
+                </View>} 
             </View>
         </View>
         );
+    }
+
+    saveAndStartGame() {
+        console.log('play')
+        this.setState({playing : true})
+    }
+
+    validPlayers() {
+        return this.state.playersSelected.length == 7
     }
 
     _showModal = () => this.setState({ isModalVisible: true })
@@ -169,25 +178,6 @@ export class GameOverviewScreen extends React.Component {
     updatePlayers(currentPlayersAvailable, currentPlayersSelected) {
         this.setState({playersAvailable : currentPlayersAvailable})
         this.setState({playersSelected: currentPlayersSelected})
-    }
-
-    saveAndStartGame() {
-
-        let game = {
-            opponent : this.state.oppTeamNeam,
-            gameTo: parseInt(this.state.gameTo),
-            startedOn: this.state.selectedIndex == 0 ? 'O' : 'D',
-            oppScore : 0,
-            teamScore : 0,
-            lines: [],
-            timestamp : new Date()
-        }
-
-        console.log(game)
-
-        this.state.LocalStorage.setCurrentGame(game)
-
-        //TODO : navigation to game overview page
     }
 
     // determines if the team is valid
