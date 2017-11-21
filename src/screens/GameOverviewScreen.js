@@ -2,11 +2,12 @@ import React from 'react';
 import { Picker, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, StackNavigator } from 'react-navigation';
 import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon } from 'react-native-elements';
+import Modal from 'react-native-modal'
+
 
 
 import LocalStorage from '../storage/LocalStorage.js';
 import PlayerSelector from '../components/playerSelector'
-import FormPicker from '../components/formPicker'
 
 
 export class GameOverviewScreen extends React.Component {
@@ -29,7 +30,8 @@ export class GameOverviewScreen extends React.Component {
             playersAvailable : [],
             lines : [],
             currentTeam: {},
-            lineSelectedIndex : 0
+            lineSelectedIndex : 0,
+            isModalVisible : false
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -106,25 +108,48 @@ export class GameOverviewScreen extends React.Component {
                     />    
 
                     <Divider style={{ backgroundColor: 'black'}} />
-                    {/* <Picker
-                    selectedValue={this.state.lineSelectedIndex}
-                    onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
-                    {this.state.lines.map((line, index) => {
-                        return (
-                            <Picker.Item label={line.name} value={index} key={index}/>
-                        ) 
-                    })}
-                    </Picker> */}
-                    <FormPicker
-                        items={this.state.lines}
-                        value={this.state.lineSelectedIndex}
-                        onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}
-                    />
+                    <View>
+                        <Button
+                            raised
+                            buttonStyle={[{backgroundColor: '#02968A'}]}
+                            textStyle={{textAlign: 'center'}}
+                            title={`Choose Line`}
+                            onPress={() => this._showModal()}
+                            //disabled={!this.teamIsValid()}
+                        />
+                        <Modal style={styles.bottomModal} backdropColor={'white'} backdropOpacity={0.7}
+                            isVisible={this.state.isModalVisible} onBackdropPress={() => this._hideModal()}>
+                            <View>
+                                <Picker
+                                    selectedValue={this.state.lineSelectedIndex}
+                                    onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
+                                    {this.state.lines.map((line, index) => {
+                                        return (
+                                            <Picker.Item label={line.name} value={index} key={index}/>
+                                        ) 
+                                    })}
+                                </Picker>
+                                <Button
+                                    raised
+                                    buttonStyle={[{backgroundColor: '#02968A'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Close`}
+                                    onPress={() => this._hideModal()}
+                                    //disabled={!this.teamIsValid()}
+                                />
+                            </View>
+                        </Modal>
+                    </View>
+                    
                         
             </View>
         </View>
         );
     }
+
+    _showModal = () => this.setState({ isModalVisible: true })
+    
+    _hideModal = () => this.setState({ isModalVisible: false })
 
     updateLineShown(itemIndex) {
         //Remove players that have already been selected from the playersAvailable
@@ -187,6 +212,18 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
         marginTop: 25
-    }
+    },
+    bottomModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
 });
 
