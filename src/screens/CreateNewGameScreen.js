@@ -17,7 +17,7 @@ export class CreateNewGameScreen extends React.Component {
         super(props)
 
         this.state = {
-            currentTeamName: '',
+            currentTeamName: props.navigation.state.params.currentTeamName,
             oppTeamNeam: '',
             gameTo: '',
             selectedIndex: 2
