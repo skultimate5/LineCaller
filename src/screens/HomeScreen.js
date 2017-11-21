@@ -18,6 +18,7 @@ export class HomeScreen extends React.Component {
 
         this.state = {
             currentTeamName: '',
+            currentGame: {},
             hasStoredTeam : false,
             isLoading: true,
             LocalStorage: new LocalStorage()
@@ -37,6 +38,14 @@ export class HomeScreen extends React.Component {
         this.setState({isLoading : true})
         this.getCurrentTeamName()
         this.getAllTeams()
+        this.getCurrentGame()
+    }
+
+    async getCurrentGame() {
+        let currentGame = await this.state.LocalStorage.getCurrentGame()
+
+        console.log(currentGame)
+        this.setState({currentGame})
     }
 
     async getCurrentTeamName() {
@@ -69,6 +78,7 @@ export class HomeScreen extends React.Component {
     // remove the data 
     async removeData() {
         this.state.LocalStorage.removeAllTeams();
+        this.state.LocalStorage.removeCurrentGame();
         await this.state.LocalStorage.removeCurrentTeamName();
         let currentTeamName = await this.state.LocalStorage.getCurrentTeamName();
         this.setState({
@@ -92,15 +102,28 @@ export class HomeScreen extends React.Component {
                         <View>
                             <Text style={{ fontSize: 30, textAlign: 'center', marginBottom: 15, marginTop: 5 }}>Team : {this.state.currentTeamName}</Text>
                             <View style={styles.button}>
-                                <Button
-                                    raised
-                                    icon={{name : 'add'}}
-                                    buttonStyle={[{backgroundColor: '#02968A'}]}
-                                    textStyle={{textAlign: 'center'}}
-                                    title={`Create New Game`}
-                                    //disabled={true}
-                                    onPress={() => this.props.navigation.navigate('CreateNewGame', {currentTeamName: this.state.currentTeamName})}                                    
-                                />
+                                {!this.state.currentGame.opponent &&
+                                    <Button
+                                        raised
+                                        icon={{name : 'add'}}
+                                        buttonStyle={[{backgroundColor: '#02968A'}]}
+                                        textStyle={{textAlign: 'center'}}
+                                        title={`Create New Game`}
+                                        //disabled={true}
+                                        onPress={() => this.props.navigation.navigate('CreateNewGame', {currentTeamName: this.state.currentTeamName})}                                    
+                                    />
+                                }
+                                {this.state.currentGame.opponent &&
+                                    <Button
+                                        raised
+                                        icon={{name : 'directions-run'}}
+                                        buttonStyle={[{backgroundColor: '#02968A'}]}
+                                        textStyle={{textAlign: 'center'}}
+                                        title={`Current Game`}
+                                        //disabled={true}
+                                        //onPress={() => this.props.navigation.navigate('CreateNewGame', {currentTeamName: this.state.currentTeamName})}                                    
+                                    />
+                                }
                             </View>
                             <View style={styles.button}>
                                 <Button

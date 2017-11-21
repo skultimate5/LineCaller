@@ -49,4 +49,19 @@ export default class LocalStorage {
     async removeCurrentTeamName(teamName) {
         return AsyncStorage.removeItem(`currentTeamName`)
     }
+
+    async getCurrentGame() {
+        return AsyncStorage.getItem(`currentGame`)
+        .then((game) => {
+            return JSON.parse(game)
+        })
+    }
+
+    async setCurrentGame(game) {
+        return AsyncStorage.setItem(`currentGame`, JSON.stringify(game))
+    }
+
+    async removeCurrentGame() {
+        return AsyncStorage.removeItem(`currentGame`)
+    }
 }

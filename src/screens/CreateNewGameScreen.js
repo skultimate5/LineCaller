@@ -72,10 +72,21 @@ export class CreateNewGameScreen extends React.Component {
     }
 
     saveAndStartGame() {
-        console.log(this.state.oppTeamNeam)
-        console.log(this.state.gameTo)
-        console.log(this.state.selectedIndex)
-        //TODO : save game to local storage
+
+        let game = {
+            opponent : this.state.oppTeamNeam,
+            gameTo: parseInt(this.state.gameTo),
+            startedOn: this.state.selectedIndex == 0 ? 'O' : 'D',
+            oppScore : 0,
+            teamScore : 0,
+            lines: [],
+            timestamp : new Date()
+        }
+
+        console.log(game)
+
+        this.state.LocalStorage.setCurrentGame(game)
+
         //TODO : navigation to game overview page
     }
 
