@@ -9,6 +9,8 @@ import { LineDetailScreen } from './src/screens/LineDetailScreen';
 import { TeamDetailScreen } from './src/screens/TeamDetailScreen';
 import { EditTeamScreen } from './src/screens/EditTeamScreen';
 import { CreateNewGameScreen } from './src/screens/CreateNewGameScreen';
+import { GameOverviewScreen } from './src/screens/GameOverviewScreen';
+
 
 
 
@@ -23,7 +25,8 @@ const LineCaller = StackNavigator({
   LineDetail: {screen: LineDetailScreen},
   TeamDetail: {screen: TeamDetailScreen},
   EditTeam: {screen: EditTeamScreen},
-  CreateNewGame: {screen: CreateNewGameScreen}
+  CreateNewGame: {screen: CreateNewGameScreen},
+  GameOverview: {screen: GameOverviewScreen}
 },
 {
   initialRouteName: 'Home',

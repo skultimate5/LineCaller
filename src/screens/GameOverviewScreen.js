@@ -5,7 +5,7 @@ import { Button, ButtonGroup, FormLabel, FormInput, Header } from 'react-native-
 
 import LocalStorage from '../storage/LocalStorage.js';
 
-export class CreateNewGameScreen extends React.Component {
+export class GameOverviewScreen extends React.Component {
     //This removes the react-navigation header
     static navigationOptions = {
         title: 'Home',
@@ -16,18 +16,13 @@ export class CreateNewGameScreen extends React.Component {
     constructor(props) {
         super(props)
 
+        console.log(props)
+
         this.state = {
-            currentTeamName: '',
-            oppTeamNeam: '',
-            gameTo: '',
-            selectedIndex: 2
+            game : props.navigation.state.params.game
         }
 
         this.state.LocalStorage = new LocalStorage()
-    }
-
-    updateIndex (selectedIndex) {
-        this.setState({selectedIndex})
     }
 
     render() {
@@ -40,30 +35,29 @@ export class CreateNewGameScreen extends React.Component {
                     color: '#fff',
                     onPress: () => this.props.navigation.navigate('Home'),
                 }}
-                centerComponent={{ text: 'Create New Game', style: { color: '#fff', fontSize:20 } }} 
+                centerComponent={{ text: 'Game Overview', style: { color: '#fff', fontSize:20 } }} 
             />
             <View style={{flex: 1}}>
-                    <FormLabel>Opponent Name</FormLabel>
-                    <FormInput value={this.state.oppTeamNeam} onChangeText={(oppTeamNeam) => this.setState({oppTeamNeam})}/>
-                    <FormLabel>Game To</FormLabel>
-                    <FormInput value={this.state.gameTo} onChangeText={(gameTo) => this.setState({gameTo})}/>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.5}}>
+                        <Text>{this.state.game.opponent}</Text>
+                        <Text>{this.state.game.oppScore}</Text>
+                    </View> 
+                    <View style={{flex: 0.5}}>
+                        <Text> This team </Text>
+                        <Text>{this.state.game.teamScore}</Text>
+                    </View>                       
+                </View>    
                         
-                    <ButtonGroup
-                        selectedBackgroundColor='#98E0E7'
-                        onPress={this.updateIndex.bind(this)}
-                        selectedIndex={this.state.selectedIndex}
-                        buttons={['O', 'D']}
-                        containerStyle={{height: 30}}
-                    />
 
                     <View style={[styles.button, {marginTop: 10}]}>
                         <Button
                             raised
                             buttonStyle={[{backgroundColor: '#02968A'}]}
                             textStyle={{textAlign: 'center'}}
-                            title={`Start Game`}
-                            onPress={() => this.saveAndStartGame()}
-                            disabled={!this.teamIsValid()}
+                            title={`New Point`}
+                            //onPress={() => this.saveAndStartGame()}
+                            //disabled={!this.teamIsValid()}
                         />
                     </View>
             </View>
@@ -87,8 +81,7 @@ export class CreateNewGameScreen extends React.Component {
 
         this.state.LocalStorage.setCurrentGame(game)
 
-        this.props.navigation.navigate('GameOverview', {game})
-    
+        //TODO : navigation to game overview page
     }
 
     // determines if the team is valid

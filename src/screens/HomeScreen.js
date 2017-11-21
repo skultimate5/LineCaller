@@ -75,6 +75,13 @@ export class HomeScreen extends React.Component {
         )
     }
 
+    async deleteCurrentGame() {
+        await this.state.LocalStorage.removeCurrentGame()
+        let currentGame = await this.state.LocalStorage.getCurrentGame()
+
+        this.setState({currentGame})
+    }
+
     // remove the data 
     async removeData() {
         this.state.LocalStorage.removeAllTeams();
@@ -102,7 +109,7 @@ export class HomeScreen extends React.Component {
                         <View>
                             <Text style={{ fontSize: 30, textAlign: 'center', marginBottom: 15, marginTop: 5 }}>Team : {this.state.currentTeamName}</Text>
                             <View style={styles.button}>
-                                {!this.state.currentGame.opponent &&
+                                {!this.state.currentGame &&
                                     <Button
                                         raised
                                         icon={{name : 'add'}}
@@ -113,7 +120,7 @@ export class HomeScreen extends React.Component {
                                         onPress={() => this.props.navigation.navigate('CreateNewGame', {currentTeamName: this.state.currentTeamName})}                                    
                                     />
                                 }
-                                {this.state.currentGame.opponent &&
+                                {this.state.currentGame &&
                                     <Button
                                         raised
                                         icon={{name : 'directions-run'}}
@@ -121,7 +128,7 @@ export class HomeScreen extends React.Component {
                                         textStyle={{textAlign: 'center'}}
                                         title={`Current Game`}
                                         //disabled={true}
-                                        //onPress={() => this.props.navigation.navigate('CreateNewGame', {currentTeamName: this.state.currentTeamName})}                                    
+                                        onPress={() => this.props.navigation.navigate('GameOverview', {game : this.state.currentGame})}                                    
                                     />
                                 }
                             </View>
@@ -163,6 +170,16 @@ export class HomeScreen extends React.Component {
                                     textStyle={{textAlign: 'center'}}
                                     title={`Destroy Data `}
                                     onPress={() => this.checkIfRemoveData()}
+                                />
+                            </View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    icon={{name : 'delete'}}
+                                    buttonStyle={[{backgroundColor: '#cc0000'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Delete Current Game `}
+                                    onPress={() => this.deleteCurrentGame()}
                                 />
                             </View>
                         </View>
