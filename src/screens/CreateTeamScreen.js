@@ -119,7 +119,8 @@ export class CreateTeamScreen extends React.Component {
         var team = {
             name : this.state.teamName.trim(),
             players: this.state.players.sort(),
-            lines: []
+            lines: [],
+            games: []
         }
 
         this.state.LocalStorage.setTeam(team.name, team)

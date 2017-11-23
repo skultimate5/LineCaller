@@ -1,5 +1,5 @@
 import React from 'react';
-import { Picker, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Picker, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Button, ButtonGroup, Divider, FormLabel, FormInput, Header, Icon, List, ListItem } from 'react-native-elements';
 import Modal from 'react-native-modal'
@@ -64,6 +64,11 @@ export class GameOverviewScreen extends React.Component {
                     onPress: () => this.props.navigation.navigate('Home'),
                 }}
                 centerComponent={{ text: `Playing ${this.state.oOrDWord}`, style: { color: '#fff', fontSize:20 } }} 
+                rightComponent={{
+                    icon: 'done',
+                    color: '#fff',
+                    onPress: () => this.askToFinishGame(),
+                }}
             />}
             <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row'}}>
@@ -166,6 +171,31 @@ export class GameOverviewScreen extends React.Component {
             </View>
         </View>
         );
+    }
+
+    askToFinishGame() {
+        Alert.alert(
+            'Finish the Game?',
+            '',
+            [
+              {text: 'Yes', onPress: () => this.finishGame()},
+              {text: 'No', onPress: () => console.log('No')},
+            ],
+            { cancelable: false }
+        )
+    }
+
+    finishGame() {
+        //TODO : add current game to this team object
+        let team = Object.assign({}, this.state.currentTeam),
+            game = Object.assign({}, this.state.game)
+
+        game.endingTimestamp = new Date()
+        team.games.push(game)
+        this.state.LocalStorage.setTeam(team.name, team)
+        this.state.LocalStorage.removeCurrentGame()
+
+        this.props.navigation.navigate('Home', {team : team, players: team.players, fromCreateTeam: true})        
     }
 
     _startPlaying() {
