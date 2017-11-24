@@ -32,7 +32,8 @@ export class GameOverviewScreen extends React.Component {
             isModalVisible : false,
             playing : false,
             onD : props.navigation.state.params.game.startedOn == 'D' ? true : false,
-            oOrDWord : props.navigation.state.params.game.startedOn == 'D' ? 'Defense' : 'Offense'
+            oOrDWord : props.navigation.state.params.game.startedOn == 'D' ? 'Defense' : 'Offense',
+            playingTime: []
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -45,11 +46,19 @@ export class GameOverviewScreen extends React.Component {
     async getTeam() {
         let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName),
             lines = team.lines,
-            players = team.players
+            players = team.players,
+            playingTime = []
         
         //put All players in first index of lines array
         lines.unshift({name : 'All', players : players})
-        this.setState({currentTeam : team, lines : lines, playersAvailable : players})
+
+        players.forEach((player) => {
+            let key = player.toString()
+
+            playingTime[key] = 0
+        })
+
+        this.setState({currentTeam : team, lines : lines, playersAvailable : players, playingTime : playingTime})
     }
 
     render() {
@@ -216,9 +225,20 @@ export class GameOverviewScreen extends React.Component {
 
         let onD = team == 'currentTeam' ? true : false
         let oOrDWord = onD ? 'Defense' : 'Offense'
-        
 
-        this.setState({game, onD, oOrDWord, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false})
+        //TODO : update playing time --> Add a badge to player selector
+        let playersSelected = this.state.playersSelected.slice(),
+            playingTime = this.state.playingTime
+
+        playersSelected.forEach((player) => {
+            let key = player.toString()
+
+            playingTime[key] = playingTime[key] + 1
+        })
+
+        console.log(playingTime)
+
+        this.setState({game, onD, oOrDWord, playingTime, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false})
         this.state.LocalStorage.setCurrentGame(game)
     }
 
