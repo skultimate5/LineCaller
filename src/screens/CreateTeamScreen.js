@@ -32,9 +32,9 @@ export class CreateTeamScreen extends React.Component {
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
-                    icon: 'home',
+                    icon: 'arrow-back',
                     color: '#fff',
-                    onPress: () => this.props.navigation.navigate('Home'),
+                    onPress: () => this.props.navigation.goBack(),
                 }}
                 centerComponent={{ text: 'Create Team', style: { color: '#fff', fontSize:20 } }} 
             />

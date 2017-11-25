@@ -80,6 +80,7 @@ export class CreateLineScreen extends React.Component {
                 playersSelected={this.state.playersSelected}
                 playersAvailable={this.state.playersAvailable}
                 updatePlayers={this.updatePlayers.bind(this)}
+                showPlayingTime={false}
             />
             <View style={{marginTop: 10}}>
                 <Button
@@ -134,12 +135,12 @@ export class CreateLineScreen extends React.Component {
         if (!error && !this.state.fromLineDetailScreen) {
             currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
             this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
         }
         else if (!error && this.state.fromLineDetailScreen) {
             currentTeam.lines[sameIndex] = {name : this.state.lineName, players: this.state.playersSelected}     
             this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
         }
     }
 }

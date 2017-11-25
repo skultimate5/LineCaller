@@ -36,9 +36,9 @@ export class CreateNewGameScreen extends React.Component {
             <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
-                    icon: 'home',
+                    icon: 'arrow-back',
                     color: '#fff',
-                    onPress: () => this.props.navigation.navigate('Home'),
+                    onPress: () => this.props.navigation.goBack(),
                 }}
                 centerComponent={{ text: 'Create New Game', style: { color: '#fff', fontSize:20 } }} 
             />

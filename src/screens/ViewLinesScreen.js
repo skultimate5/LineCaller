@@ -18,6 +18,7 @@ export class ViewLinesScreen extends React.Component {
 
         this.state = {
             currentTeamName: props.navigation.state.params.currentTeamName,
+            fromHomeScreen: props.navigation.state.params.fromHomeScreen,
             team: {},
             lines: []
         }
@@ -36,7 +37,22 @@ export class ViewLinesScreen extends React.Component {
     render() {
         return (
         <View style={{flex : 1}}>
-            <Header
+            {this.state.fromHomeScreen && <Header
+                outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
+                leftComponent={{
+                    icon: 'arrow-back',
+                    color: '#fff',
+                    onPress: () => this.props.navigation.goBack(),
+                }}
+                centerComponent={{ text: 'Lines', style: { color: '#fff', fontSize:20 } }} 
+                rightComponent={{
+                    icon: 'add',
+                    color: '#fff',
+                    onPress: () => this.props.navigation.navigate('CreateLine', {team : this.state.team, players: this.state.team.players}),
+                }}
+            />}
+
+            {!this.state.fromHomeScreen && <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
                     icon: 'home',
@@ -49,7 +65,7 @@ export class ViewLinesScreen extends React.Component {
                     color: '#fff',
                     onPress: () => this.props.navigation.navigate('CreateLine', {team : this.state.team, players: this.state.team.players}),
                 }}
-            />
+            />}
             <View >
                 <ScrollView>
                     <List>

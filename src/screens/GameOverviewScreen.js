@@ -68,9 +68,9 @@ export class GameOverviewScreen extends React.Component {
             {this.state.oOrDWord && <Header
                 outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
                 leftComponent={{
-                    icon: 'home',
+                    icon: 'arrow-back',
                     color: '#fff',
-                    onPress: () => this.props.navigation.navigate('Home'),
+                    onPress: () => this.props.navigation.goBack(),
                 }}
                 centerComponent={{ text: `Playing ${this.state.oOrDWord}`, style: { color: '#fff', fontSize:20 } }} 
                 rightComponent={{

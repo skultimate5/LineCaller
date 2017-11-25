@@ -101,7 +101,7 @@ export class LineDetailScreen extends React.Component {
 
         currentTeam.lines.splice(index, 1)    
         this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-        this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name})
+        this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
         
     }
 

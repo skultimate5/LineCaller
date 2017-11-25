@@ -139,7 +139,7 @@ export class HomeScreen extends React.Component {
                                     buttonStyle={[{backgroundColor: '#2095F2'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`View Lines`}
-                                    onPress={() => this.props.navigation.navigate('ViewLines', {currentTeamName : this.state.currentTeamName})}
+                                    onPress={() => this.props.navigation.navigate('ViewLines', {currentTeamName : this.state.currentTeamName, fromHomeScreen: true})}
                                 />
                             </View>
                             <View style={styles.button}>
