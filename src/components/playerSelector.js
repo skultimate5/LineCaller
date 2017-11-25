@@ -50,7 +50,7 @@ export default class PlayerSelector extends Component {
                                     title={player}
                                     hideChevron={true}
                                     onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
-                                    badge={{ value: playingTime[player], textStyle: { color: 'orange' }}}
+                                    badge={{ value: playingTime[player]}}
                                 />
                                 ))
                             }
@@ -81,7 +81,7 @@ export default class PlayerSelector extends Component {
                                     title={player}
                                     hideChevron={true}
                                     onPress={() => {this.addPlayer(player, playersAvailable, playersSelected, updatePlayers)}}
-                                    badge={{ value: playingTime[player], textStyle: { color: 'orange' } }}
+                                    badge={{ value: playingTime[player] }}
                                 />
                                 ))
                             }
