@@ -35,14 +35,27 @@ export default class PlayerSelector extends Component {
     }
 
     render = () => {
-        const { playersAvailable, playersSelected, updatePlayers } = this.props;
+        const { playersAvailable, playersSelected, updatePlayers, showPlayingTime, playingTime } = this.props;
         
         return (
             <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={[styles.halfWidth, {paddingRight: 10}]}>
                     <Text style={{justifyContent: 'center', alignContent: 'center'}}>Players Selected</Text>
                     <ScrollView>
-                        <List >
+                        {showPlayingTime && <List >
+                            {
+                                playersSelected.map((player, i) => (
+                                <ListItem
+                                    key={i}
+                                    title={player}
+                                    hideChevron={true}
+                                    onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
+                                    badge={{ value: playingTime[player], textStyle: { color: 'orange' }}}
+                                />
+                                ))
+                            }
+                        </List>}
+                        {!showPlayingTime && <List >
                             {
                                 playersSelected.map((player, i) => (
                                 <ListItem
@@ -53,14 +66,14 @@ export default class PlayerSelector extends Component {
                                 />
                                 ))
                             }
-                        </List>
+                        </List>}
                     </ScrollView>
                 </View>
 
                 <View style={[styles.halfWidth]}>
                     <Text style={{justifyContent: 'center', alignContent: 'center'}}>Players Available</Text>
                     <ScrollView>
-                        <List>
+                        {showPlayingTime && <List>
                             {
                                 playersAvailable.map((player, i) => (
                                 <ListItem
@@ -68,11 +81,23 @@ export default class PlayerSelector extends Component {
                                     title={player}
                                     hideChevron={true}
                                     onPress={() => {this.addPlayer(player, playersAvailable, playersSelected, updatePlayers)}}
-                                    
+                                    badge={{ value: playingTime[player], textStyle: { color: 'orange' } }}
                                 />
                                 ))
                             }
-                        </List>
+                        </List>}
+                        {!showPlayingTime && <List>
+                            {
+                                playersAvailable.map((player, i) => (
+                                <ListItem
+                                    key={i}
+                                    title={player}
+                                    hideChevron={true}
+                                    onPress={() => {this.addPlayer(player, playersAvailable, playersSelected, updatePlayers)}}
+                                />
+                                ))
+                            }
+                        </List>}
                     </ScrollView>
                 </View>
             </View>

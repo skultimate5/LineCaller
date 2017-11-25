@@ -4,7 +4,6 @@ import { StackNavigator } from 'react-navigation';
 import { Button, Divider, FormLabel, FormInput, Header, List, ListItem } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage';
-import PlayerSelector from '../components/playerSelector'
 
 export class LineDetailScreen extends React.Component {
     //This removes the react-navigation header

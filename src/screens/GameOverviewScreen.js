@@ -140,6 +140,8 @@ export class GameOverviewScreen extends React.Component {
                         playersSelected={this.state.playersSelected}
                         playersAvailable={this.state.playersAvailable}
                         updatePlayers={this.updatePlayers.bind(this)}
+                        showPlayingTime={true}
+                        playingTime={this.state.playingTime}
                     />    
 
                     <Divider style={{ backgroundColor: 'black'}} />
