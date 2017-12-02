@@ -95,6 +95,54 @@ export class HomeScreen extends React.Component {
         });
     }
 
+    async getCurrentTeamData() {
+        let currentTeamName = this.state.currentTeamName,
+            currentTeamData = await this.state.LocalStorage.getTeam(currentTeamName)
+
+        return currentTeamData
+    }   
+
+    exportData() {
+
+        this.getCurrentTeamData().then((currentTeamData) => {
+            console.log(currentTeamData)
+            var body = {
+                "personalizations": [{"to": [{"email": "sophia.knowles20@gmail.com"}]}],
+                "from": {"email": "sophia.knowles20@gmail.com"},
+                "subject": "Sending from app",
+                "content": [{"type": "text/plain", "value": JSON.stringify(currentTeamData)}]}
+
+            console.log(body)
+    
+            fetch('https://api.sendgrid.com/v3/mail/send', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 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',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+            })
+            .then((response) => {
+                if(response.status === 202) {
+                    Alert.alert(
+                        'Your data has been emailed to you',
+                        '',
+                        [
+                          {text: 'OK', onPress: () => console.log('OK')}
+                        ],
+                        { cancelable: false }
+                    )
+                }
+            })
+            // .then((responseJson) => {
+            //   console.log(responseJson)
+            // })
+            .catch((error) => {
+              console.error(error);
+            });
+        })
+    }
+
     render() {
         return (
         <View>
@@ -180,6 +228,15 @@ export class HomeScreen extends React.Component {
                                     textStyle={{textAlign: 'center'}}
                                     title={`Delete Current Game `}
                                     onPress={() => this.deleteCurrentGame()}
+                                />
+                            </View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    buttonStyle={[{backgroundColor: 'blue'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Export Team Data`}
+                                    onPress={() => this.exportData()}
                                 />
                             </View>
                         </View>
