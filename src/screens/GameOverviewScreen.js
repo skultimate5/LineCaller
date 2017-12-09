@@ -45,10 +45,10 @@ export class GameOverviewScreen extends React.Component {
 
     async getTeam() {
         let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName),
-            lines = team.lines,
+            lines = team.lines.slice(),
             players = team.players,
             playerStats = []
-        
+            
         //put All players in first index of lines array
         lines.unshift({name : 'All', players : players})
 
