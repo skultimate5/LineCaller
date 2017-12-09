@@ -1,7 +1,8 @@
 import React from 'react';
 import { Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Button, Header } from 'react-native-elements'; 
+import { Button, FormInput, FormLabel, Header } from 'react-native-elements'; 
+import Modal from 'react-native-modal';
 
 import LocalStorage from '../storage/LocalStorage.js';
 
@@ -21,7 +22,9 @@ export class HomeScreen extends React.Component {
             currentGame: {},
             hasStoredTeam : false,
             isLoading: true,
-            LocalStorage: new LocalStorage()
+            LocalStorage: new LocalStorage(),
+            isModalVisible : false,
+            email: ''         
         }
 
         //this.state.LocalStorage.removeAllTeams()
@@ -106,42 +109,45 @@ export class HomeScreen extends React.Component {
 
         this.getCurrentTeamData().then((currentTeamData) => {
             console.log(currentTeamData)
-            // var body = {
-            //     "personalizations": [{"to": [{"email": "sophia.knowles20@gmail.com"}]}],
-            //     "from": {"email": "sophia.knowles20@gmail.com"},
-            //     "subject": "Sending from app",
-            //     "content": [{"type": "text/plain", "value": JSON.stringify(currentTeamData)}]}
 
-            // console.log(body)
+            var body = {
+                "teamData": JSON.stringify(currentTeamData),
+                "email": this.state.email
+            }
+
+            console.log(body)
     
-            // fetch('https://api.sendgrid.com/v3/mail/send', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Authorization': 'Bearer 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',
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(body)
+            fetch('https://linecallerdataexport.azurewebsites.net/api/dataExport?code=FaDQgcPCSAazDUHpIXvgz3gAeyQGWQQWI7niXePc5p9vta2TzPkh9A==', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+            })
+            .then((response) => {
+                if(response.status === 200) {
+                    Alert.alert(
+                        'Your data has been exported',
+                        '',
+                        [
+                          {text: 'OK', onPress: () => this._hideModal()}
+                        ],
+                        { cancelable: false }
+                    )
+                }
+            })
+            // .then((responseJson) => {
+            //   console.log(responseJson)
             // })
-            // .then((response) => {
-            //     if(response.status === 202) {
-            //         Alert.alert(
-            //             'Your data has been emailed to you',
-            //             '',
-            //             [
-            //               {text: 'OK', onPress: () => console.log('OK')}
-            //             ],
-            //             { cancelable: false }
-            //         )
-            //     }
-            // })
-            // // .then((responseJson) => {
-            // //   console.log(responseJson)
-            // // })
-            // .catch((error) => {
-            //   console.error(error);
-            // });
+            .catch((error) => {
+              console.error(error);
+            });
         })
     }
+
+    _showModal = () => this.setState({ isModalVisible: true })
+    
+    _hideModal = () => this.setState({ isModalVisible: false })
 
     render() {
         return (
@@ -236,10 +242,28 @@ export class HomeScreen extends React.Component {
                                     buttonStyle={[{backgroundColor: 'blue'}]}
                                     textStyle={{textAlign: 'center'}}
                                     title={`Export Team Data`}
-                                    onPress={() => this.exportData()}
-                                    disabled={true}
+                                    onPress={() => this._showModal()}
+                                    disabled={false}
                                 />
                             </View>
+
+                            <Modal style={styles.bottomModal} backdropColor={'white'} backdropOpacity={0.7}
+                                isVisible={this.state.isModalVisible} onBackdropPress={() => this._hideModal()}>
+                                <View>
+                                    <View style={marginBottom = 15}>
+                                        <FormLabel>Email to send data to</FormLabel>
+                                        <FormInput value={this.state.email} onChangeText={(email) => this.setState({email})}/>
+                                    </View>
+                                    <Button
+                                        raised
+                                        buttonStyle={[{backgroundColor: '#02968A'}]}
+                                        textStyle={{textAlign: 'center'}}
+                                        title={`Export`}
+                                        onPress={() => this.exportData()}
+                                    />
+                                </View>
+                            </Modal>
+
                             <View style={styles.button}>
                                 <Button
                                     raised
@@ -290,6 +314,10 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 10,
         marginTop: 25
-    }
+    },
+    bottomModal: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
 });
 
