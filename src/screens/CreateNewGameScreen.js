@@ -80,7 +80,8 @@ export class CreateNewGameScreen extends React.Component {
             oppScore : 0,
             teamScore : 0,
             lines: [],
-            timestamp : new Date()
+            timestamp : new Date(),
+            playerStats: []
         }
 
         console.log(game)

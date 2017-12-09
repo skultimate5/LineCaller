@@ -240,6 +240,16 @@ export class HomeScreen extends React.Component {
                                     disabled={true}
                                 />
                             </View>
+                            <View style={styles.button}>
+                                <Button
+                                    raised
+                                    buttonStyle={[{backgroundColor: 'blue'}]}
+                                    textStyle={{textAlign: 'center'}}
+                                    title={`Test During Point Screen`}
+                                    onPress={() => this.props.navigation.navigate('TestDuringPoint')}       
+                                    disabled={true}             
+                                />
+                            </View>
                         </View>
                     }
                     {!this.state.isLoading && this.state.currentTeamName == null && 

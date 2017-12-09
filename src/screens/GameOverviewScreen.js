@@ -33,7 +33,7 @@ export class GameOverviewScreen extends React.Component {
             playing : false,
             onD : props.navigation.state.params.game.startedOn == 'D' ? true : false,
             oOrDWord : props.navigation.state.params.game.startedOn == 'D' ? 'Defense' : 'Offense',
-            playingTime: []
+            playerStats: []
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -47,7 +47,7 @@ export class GameOverviewScreen extends React.Component {
         let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName),
             lines = team.lines,
             players = team.players,
-            playingTime = []
+            playerStats = []
         
         //put All players in first index of lines array
         lines.unshift({name : 'All', players : players})
@@ -55,10 +55,16 @@ export class GameOverviewScreen extends React.Component {
         players.forEach((player) => {
             let key = player.toString()
 
-            playingTime[key] = 0
+            playerStats[key] = {
+                playingTime: 0,
+                goals: 0,
+                assists: 0,
+                ds: 0,
+                turns: 0
+            }
         })
 
-        this.setState({currentTeam : team, lines : lines, playersAvailable : players, playingTime : playingTime})
+        this.setState({currentTeam : team, lines : lines, playersAvailable : players, playerStats : playerStats})
     }
 
     render() {
@@ -108,12 +114,54 @@ export class GameOverviewScreen extends React.Component {
                             <List>
                                 {
                                     this.state.playersSelected.map((player, i) => (
-                                    <ListItem
-                                        key={i}
-                                        title={player}
-                                        hideChevron={true}
-                                        //onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
-                                    />
+                                        <View style={{flex: 1, flexDirection:'row'}} key={i}>
+                                            <View style={{flex: 0.3, alignItems: 'center', justifyContent: 'center'}}>
+                                                {/* <ListItem
+                                                    title={player}
+                                                    hideChevron={true}
+                                                    //onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
+                                                /> */}
+                                                <Text style={{textAlign:'center', fontSize: 15}}>{player}</Text>
+                                            </View>
+                                            <View style={{flex: 0.7, flexDirection: 'row'}}   >
+                                                <View style={styles.button}>
+                                                    <Button
+                                                        raised
+                                                        buttonStyle={[{backgroundColor: '#2095F2'}]}
+                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        title={`G`}
+                                                        onPress={() => this.addPlayerGoal(player)}                    
+                                                    />
+                                                </View>
+                                                <View style={styles.button}>
+                                                    <Button
+                                                        raised
+                                                        buttonStyle={[{backgroundColor: '#8BC24A'}]}
+                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        title={`A`}
+                                                        onPress={() => this.addPlayerAssist(player)}                    
+                                                    />
+                                                </View>
+                                                <View style={styles.button}>
+                                                    <Button
+                                                        raised
+                                                        buttonStyle={[{backgroundColor: '#9C28B0'}]}
+                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        title={`D`}
+                                                        onPress={() => this.addPlayerD(player)}                    
+                                                    />
+                                                </View>
+                                                <View style={styles.button}>
+                                                    <Button
+                                                        raised
+                                                        buttonStyle={[{backgroundColor: '#02968A'}]}
+                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        title={`T`}
+                                                        onPress={() => this.addPlayerTurn(player)}                    
+                                                    />
+                                                </View>
+                                            </View>
+                                        </View>
                                     ))
                                 }
                             </List>
@@ -141,7 +189,7 @@ export class GameOverviewScreen extends React.Component {
                         playersAvailable={this.state.playersAvailable}
                         updatePlayers={this.updatePlayers.bind(this)}
                         showPlayingTime={true}
-                        playingTime={this.state.playingTime}
+                        playerStats={this.state.playerStats}
                     />    
 
                     <Divider style={{ backgroundColor: 'black'}} />
@@ -184,6 +232,47 @@ export class GameOverviewScreen extends React.Component {
         );
     }
 
+    addPlayerGoal(player) {
+        let playerStats = this.state.playerStats,
+            key = player.toString()
+
+        playerStats[key].goals = playerStats[key].goals + 1
+
+        this.setState({playerStats})
+
+        console.log(`Goal ${player}`)
+    }
+
+    addPlayerAssist(player) {
+        let playerStats = this.state.playerStats,
+            key = player.toString()
+
+        playerStats[key].assists = playerStats[key].assists + 1
+
+        this.setState({playerStats})
+        console.log(`Assist ${player}`)
+    }
+
+    addPlayerD(player) {
+        let playerStats = this.state.playerStats,
+            key = player.toString()
+
+        playerStats[key].ds = playerStats[key].ds + 1
+
+        this.setState({playerStats})
+        console.log(`D ${player}`)
+    }
+
+    addPlayerTurn(player) {
+        let playerStats = this.state.playerStats,
+            key = player.toString()
+
+        playerStats[key].turns = playerStats[key].turns + 1
+
+        this.setState({playerStats})
+        console.log(`Turn ${player}`)
+    }
+
     askToFinishGame() {
         Alert.alert(
             'Finish the Game?',
@@ -197,11 +286,13 @@ export class GameOverviewScreen extends React.Component {
     }
 
     finishGame() {
-        //TODO : add current game to this team object
+        //Add current game to this team object
+
         let team = Object.assign({}, this.state.currentTeam),
             game = Object.assign({}, this.state.game)
 
         game.endingTimestamp = new Date()
+        game.playerStats = this.state.playerStats
         team.games.push(game)
         this.state.LocalStorage.setTeam(team.name, team)
         this.state.LocalStorage.removeCurrentGame()
@@ -228,19 +319,18 @@ export class GameOverviewScreen extends React.Component {
         let onD = team == 'currentTeam' ? true : false
         let oOrDWord = onD ? 'Defense' : 'Offense'
 
-        //TODO : update playing time --> Add a badge to player selector
         let playersSelected = this.state.playersSelected.slice(),
-            playingTime = this.state.playingTime
+            playerStats = this.state.playerStats
 
         playersSelected.forEach((player) => {
             let key = player.toString()
 
-            playingTime[key] = playingTime[key] + 1
+            playerStats[key].playingTime = playerStats[key].playingTime + 1
         })
 
-        console.log(playingTime)
+        console.log(playerStats)
 
-        this.setState({game, onD, oOrDWord, playingTime, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false})
+        this.setState({game, onD, oOrDWord, playerStats, playersSelected: [], lineSelectedIndex: 0, playersAvailable: this.state.currentTeam.players, playing: false})
         this.state.LocalStorage.setCurrentGame(game)
     }
 

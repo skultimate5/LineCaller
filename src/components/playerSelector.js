@@ -35,7 +35,7 @@ export default class PlayerSelector extends Component {
     }
 
     render = () => {
-        const { playersAvailable, playersSelected, updatePlayers, showPlayingTime, playingTime } = this.props;
+        const { playersAvailable, playersSelected, updatePlayers, showPlayingTime, playerStats } = this.props;
         
         return (
             <View style={{flex: 1, flexDirection: 'row'}}>
@@ -50,7 +50,7 @@ export default class PlayerSelector extends Component {
                                     title={player}
                                     hideChevron={true}
                                     onPress={() => {this.removePlayer(player, playersAvailable, playersSelected, updatePlayers)}}
-                                    badge={{ value: playingTime[player]}}
+                                    badge={{ value: playerStats[player].playingTime}}
                                 />
                                 ))
                             }
@@ -81,7 +81,7 @@ export default class PlayerSelector extends Component {
                                     title={player}
                                     hideChevron={true}
                                     onPress={() => {this.addPlayer(player, playersAvailable, playersSelected, updatePlayers)}}
-                                    badge={{ value: playingTime[player] }}
+                                    badge={{ value: playerStats[player].playingTime }}
                                 />
                                 ))
                             }
