@@ -11,6 +11,7 @@ import { EditTeamScreen } from './src/screens/EditTeamScreen';
 import { CreateNewGameScreen } from './src/screens/CreateNewGameScreen';
 import { GameOverviewScreen } from './src/screens/GameOverviewScreen';
 import { TestDuringPointScreen } from './src/screens/TestDuringPointScreen';
+import { ReorderPlayersScreen } from './src/screens/ReorderPlayersScreen';
 
 
 
@@ -28,7 +29,8 @@ const LineCaller = StackNavigator({
   EditTeam: {screen: EditTeamScreen},
   CreateNewGame: {screen: CreateNewGameScreen},
   GameOverview: {screen: GameOverviewScreen},
-  TestDuringPoint: {screen: TestDuringPointScreen}
+  TestDuringPoint: {screen: TestDuringPointScreen},
+  ReorderPlayers: {screen: ReorderPlayersScreen}
 },
 {
   initialRouteName: 'Home',

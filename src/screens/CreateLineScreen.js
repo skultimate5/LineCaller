@@ -53,7 +53,8 @@ export class CreateLineScreen extends React.Component {
                         color: '#fff',
                         onPress: () => this.props.navigation.goBack(),
                     }}
-                    centerComponent={{ text: this.state.lineName, style: { color: '#fff', fontSize:20 } }} 
+                    centerComponent={{ text: this.state.lineName, style: { color: '#fff', fontSize:20 } }}   
+                    rightComponent={<ReorderHeaderComponent navigation={this.props.navigation}/>}                  
                 />
             }
             {this.state.fromCreateTeam && 
@@ -142,6 +143,23 @@ export class CreateLineScreen extends React.Component {
             this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
             this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
         }
+    }
+}
+
+class ReorderHeaderComponent extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        const navigation = this.props.navigation
+    
+        return (
+            <Button 
+                raised
+                title='Reorder'
+                onPress={() => {navigation.navigate('ReorderPlayers')}}/>
+        );
     }
 }
 
