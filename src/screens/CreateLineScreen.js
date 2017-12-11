@@ -54,7 +54,7 @@ export class CreateLineScreen extends React.Component {
                         onPress: () => this.props.navigation.goBack(),
                     }}
                     centerComponent={{ text: this.state.lineName, style: { color: '#fff', fontSize:20 } }}   
-                    rightComponent={<ReorderHeaderComponent navigation={this.props.navigation}/>}                  
+                    rightComponent={<ReorderHeaderComponent navigation={this.props.navigation} playersSelected={this.state.playersSelected}/>}
                 />
             }
             {this.state.fromCreateTeam && 
@@ -152,13 +152,13 @@ class ReorderHeaderComponent extends React.Component {
     }
 
     render() {
-        const navigation = this.props.navigation
+        const {navigation, playersSelected} = this.props
     
         return (
             <Button 
                 raised
                 title='Reorder'
-                onPress={() => {navigation.navigate('ReorderPlayers')}}/>
+                onPress={() => {navigation.navigate('ReorderPlayers', {playersSelected})}}/>
         );
     }
 }

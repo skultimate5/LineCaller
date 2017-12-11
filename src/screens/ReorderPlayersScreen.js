@@ -21,7 +21,11 @@ export class ReorderPlayersScreen extends React.Component {
         super(props)
 
         this.state = {
+            playersSelected : props.navigation.state.params.playersSelected,
+            order: []
         }
+
+        this.state.data = this.convertPlayersSelected()
         this.state.LocalStorage = new LocalStorage()
     }
 
@@ -30,48 +34,6 @@ export class ReorderPlayersScreen extends React.Component {
     }
 
     render() {
-        const data = {
-            0: {
-              image: 'https://placekitten.com/200/240',
-              text: 'Chloe',
-            },
-            1: {
-              image: 'https://placekitten.com/200/201',
-              text: 'Jasper',
-            },
-            2: {
-              image: 'https://placekitten.com/200/202',
-              text: 'Pepper',
-            },
-            3: {
-              image: 'https://placekitten.com/200/203',
-              text: 'Oscar',
-            },
-            4: {
-              image: 'https://placekitten.com/200/204',
-              text: 'Dusty',
-            },
-            5: {
-              image: 'https://placekitten.com/200/205',
-              text: 'Spooky',
-            },
-            6: {
-              image: 'https://placekitten.com/200/210',
-              text: 'Kiki',
-            },
-            7: {
-              image: 'https://placekitten.com/200/215',
-              text: 'Smokey',
-            },
-            8: {
-              image: 'https://placekitten.com/200/220',
-              text: 'Gizmo',
-            },
-            9: {
-              image: 'https://placekitten.com/220/239',
-              text: 'Kitty',
-            },
-          };
         return (
         <View style={{flex : 1}}>
             <Header
@@ -84,11 +46,15 @@ export class ReorderPlayersScreen extends React.Component {
                 centerComponent={{ text: 'Reorder Players', style: { color: '#fff', fontSize:20 } }} 
             />
            
-            <SortableList
-                style={styles.list}
-                contentContainerStyle={styles.contentContainer}
-                data={data}
-                renderRow={this._renderRow} />
+           {this.state.data && 
+                <SortableList
+                    style={styles.list}
+                    contentContainerStyle={styles.contentContainer}
+                    data={this.state.data}
+                    renderRow={this._renderRow}
+                    onChangeOrder={(newOrder) => {this.updateOrder(newOrder)}}
+                    />
+           }
 
             <View style={{marginTop: 10}}>
                 <Button
@@ -103,8 +69,26 @@ export class ReorderPlayersScreen extends React.Component {
         );
     }
 
+    updateOrder(newOrder) {
+        this.setState({order : newOrder})
+    }
+
+    convertPlayersSelected(playersSelected) {
+        var playersSelected = this.state.playersSelected.slice(),
+            convertedPlayersSelected = {}
+
+        playersSelected.forEach((player, index) => {
+            convertedPlayersSelected[index.toString()]= {
+                text: player
+            }
+        })
+
+        return convertedPlayersSelected
+    }
+
     saveLine() {
-        console.log(this.state);
+        console.log(this.state.data);
+        console.log(this.state.order)
         // if (!this.state.lineName) {
         //     console.log("what the fuck dude")
         // }
