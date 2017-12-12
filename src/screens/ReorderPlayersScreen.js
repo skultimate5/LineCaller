@@ -22,6 +22,9 @@ export class ReorderPlayersScreen extends React.Component {
 
         this.state = {
             playersSelected : props.navigation.state.params.playersSelected,
+            team: props.navigation.state.params.team,
+            fromLineDetailScreen: props.navigation.state.params.fromLineDetailScreen,
+            lineName: props.navigation.state.params.lineName,
             order: []
         }
 
@@ -87,40 +90,42 @@ export class ReorderPlayersScreen extends React.Component {
     }
 
     saveLine() {
-        console.log(this.state.data);
-        console.log(this.state.order)
-        // if (!this.state.lineName) {
-        //     console.log("what the fuck dude")
-        // }
+        let order = this.state.order.slice(),
+            playersSelected = this.state.data
+            reorderedPlayers = []
 
-        // let currentTeam = Object.assign({}, this.state.team)
+        order.forEach((playerIndex) => {
+            reorderedPlayers.push(playersSelected[playerIndex].text)
+        })
 
-        // let sameIndex = -1,
-        //     error = false
+        let currentTeam = Object.assign({}, this.state.team)
 
-        // currentTeam.lines.forEach((line, i) => {
-        //     if (this.state.lineName === line.name) {
-        //         if (this.state.fromLineDetailScreen) {
-        //             sameIndex = i
-        //         }
-        //         else {
-        //             error = true
-        //             this.setState({sameNameError : true})
-        //         }
-        //     }
-        // })
+        let sameIndex = -1,
+            error = false
 
-        // //Checking if need to update instead of add new line
-        // if (!error && !this.state.fromLineDetailScreen) {
-        //     currentTeam.lines.push({name: this.state.lineName, players: this.state.playersSelected})
-        //     this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-        //     this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
-        // }
-        // else if (!error && this.state.fromLineDetailScreen) {
-        //     currentTeam.lines[sameIndex] = {name : this.state.lineName, players: this.state.playersSelected}     
-        //     this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-        //     this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
-        // }
+        currentTeam.lines.forEach((line, i) => {
+            if (this.state.lineName === line.name) {
+                if (this.state.fromLineDetailScreen) {
+                    sameIndex = i
+                }
+                else {
+                    error = true
+                    this.setState({sameNameError : true})
+                }
+            }
+        })
+        
+        //Checking if need to update instead of add new line
+        if (!this.state.fromLineDetailScreen) {
+            currentTeam.lines.push({name: this.state.lineName, players: reorderedPlayers})
+            this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
+        }
+        else if (this.state.fromLineDetailScreen) {
+            currentTeam.lines[sameIndex] = {name : this.state.lineName, players: reorderedPlayers}     
+            this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
+            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
+        }
     }
 }
 
