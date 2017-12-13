@@ -114,7 +114,7 @@ export class GameOverviewScreen extends React.Component {
                             <List>
                                 {
                                     this.state.playersSelected.map((player, i) => (
-                                        <View style={{flex: 1, flexDirection:'row'}} key={i}>
+                                        <View style={{flex: 1, flexDirection:'row', height: 65}} key={i}>
                                             <View style={{flex: 0.3, alignItems: 'center', justifyContent: 'center'}}>
                                                 {/* <ListItem
                                                     title={player}
@@ -128,7 +128,7 @@ export class GameOverviewScreen extends React.Component {
                                                     <Button
                                                         raised
                                                         buttonStyle={[{backgroundColor: '#2095F2'}]}
-                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        textStyle={{textAlign: 'center', fontSize: 12}}
                                                         title={`G`}
                                                         onPress={() => this.addPlayerGoal(player)}                    
                                                     />
@@ -137,7 +137,7 @@ export class GameOverviewScreen extends React.Component {
                                                     <Button
                                                         raised
                                                         buttonStyle={[{backgroundColor: '#8BC24A'}]}
-                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        textStyle={{textAlign: 'center', fontSize: 12}}
                                                         title={`A`}
                                                         onPress={() => this.addPlayerAssist(player)}                    
                                                     />
@@ -146,7 +146,7 @@ export class GameOverviewScreen extends React.Component {
                                                     <Button
                                                         raised
                                                         buttonStyle={[{backgroundColor: '#9C28B0'}]}
-                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        textStyle={{textAlign: 'center', fontSize: 12}}
                                                         title={`D`}
                                                         onPress={() => this.addPlayerD(player)}                    
                                                     />
@@ -155,7 +155,7 @@ export class GameOverviewScreen extends React.Component {
                                                     <Button
                                                         raised
                                                         buttonStyle={[{backgroundColor: '#02968A'}]}
-                                                        textStyle={{textAlign: 'center', fontSize: 15}}
+                                                        textStyle={{textAlign: 'center', fontSize: 12}}
                                                         title={`T`}
                                                         onPress={() => this.addPlayerTurn(player)}                    
                                                     />
