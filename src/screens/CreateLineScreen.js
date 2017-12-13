@@ -5,6 +5,7 @@ import { Button, Divider, FormLabel, FormInput, FormValidationMessage, Header, L
 
 import LocalStorage from '../storage/LocalStorage';
 import PlayerSelector from '../components/playerSelector'
+import ReorderHeader from '../components/reorderHeader'
 
 export class CreateLineScreen extends React.Component {
     //This removes the react-navigation header
@@ -54,7 +55,7 @@ export class CreateLineScreen extends React.Component {
                         onPress: () => this.props.navigation.goBack(),
                     }}
                     centerComponent={{ text: this.state.lineName, style: { color: '#fff', fontSize:20 } }}   
-                    rightComponent={<ReorderHeaderComponent navigation={this.props.navigation} 
+                    rightComponent={<ReorderHeader navigation={this.props.navigation} 
                         playersSelected={this.state.playersSelected} 
                         lineName={this.state.lineName}
                         team={this.state.team}
@@ -147,23 +148,6 @@ export class CreateLineScreen extends React.Component {
             this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
             this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
         }
-    }
-}
-
-class ReorderHeaderComponent extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        const {navigation, playersSelected, lineName, team, fromLineDetailScreen} = this.props
-    
-        return (
-            <Button 
-                raised
-                title='Reorder'
-                onPress={() => {navigation.navigate('ReorderPlayers', {playersSelected, lineName, team, fromLineDetailScreen})}}/>
-        );
     }
 }
 

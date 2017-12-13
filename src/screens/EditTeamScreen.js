@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation';
 import { Button, FormLabel, FormInput, Header, Icon, List, ListItem } from 'react-native-elements'; 
 
 import LocalStorage from '../storage/LocalStorage.js';
+import ReorderHeader from '../components/reorderHeader'
 
 export class EditTeamScreen extends React.Component {
     //This removes the react-navigation header
@@ -38,6 +39,10 @@ export class EditTeamScreen extends React.Component {
                     onPress: () => this.props.navigation.goBack(),
                 }}
                 centerComponent={{ text: `Edit ${this.state.team.name}`, style: { color: '#fff', fontSize:20 } }} 
+                rightComponent={<ReorderHeader navigation={this.props.navigation} 
+                        playersSelected={this.state.players}
+                        team={this.state.team}
+                        fromLineDetailScreen={false}/>}
             />
             <View style={{flex: 1}}>
                 <FormLabel>Player Name</FormLabel>

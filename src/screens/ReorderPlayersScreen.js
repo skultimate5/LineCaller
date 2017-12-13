@@ -115,11 +115,11 @@ export class ReorderPlayersScreen extends React.Component {
             }
         })
         
-        //Checking if need to update instead of add new line
+        //Checking if updating line order or updating players on team
         if (!this.state.fromLineDetailScreen) {
-            currentTeam.lines.push({name: this.state.lineName, players: reorderedPlayers})
+            currentTeam.players = reorderedPlayers
             this.state.LocalStorage.setTeam(currentTeam.name, currentTeam)
-            this.props.navigation.navigate('ViewLines', {currentTeamName : currentTeam.name, fromHomeScreen: false})
+            this.props.navigation.navigate('ViewTeam', {currentTeamName : currentTeam.name, fromHomeScreen: false})
         }
         else if (this.state.fromLineDetailScreen) {
             currentTeam.lines[sameIndex] = {name : this.state.lineName, players: reorderedPlayers}     

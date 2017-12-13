@@ -20,7 +20,8 @@ export class ViewTeamScreen extends React.Component {
 		this.state = { 
 			LocalStorage: new LocalStorage(),
 			teams: [],
-			currentTeamName: props.navigation.state.params.currentTeamName
+			currentTeamName: props.navigation.state.params.currentTeamName,
+			fromHomeScreen: props.navigation.state.params.fromHomeScreen
 		 };
 	}
 
@@ -45,15 +46,29 @@ export class ViewTeamScreen extends React.Component {
 	render() {
 		return (
 			<View>
-				<Header
-					outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
-					leftComponent={{
-						icon: 'arrow-back',
-						color: '#fff',
-						onPress: () => this.props.navigation.goBack()
-					}}
-					centerComponent={{ text: 'View Teams', style: { color: '#fff', fontSize:20 } }} 
-				/>
+				{this.state.fromHomeScreen && 
+					<Header
+						outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
+						leftComponent={{
+							icon: 'arrow-back',
+							color: '#fff',
+							onPress: () => this.props.navigation.goBack()
+						}}
+						centerComponent={{ text: 'View Teams', style: { color: '#fff', fontSize:20 } }} 
+					/>
+				}
+				{!this.state.fromHomeScreen && 
+					<Header
+						outerContainerStyles={{ backgroundColor: '#3D6DCC', zIndex: 1 }}
+						leftComponent={{
+							icon: 'home',
+							color: '#fff',
+							onPress: () => this.props.navigation.navigate('Home'),
+						}}
+						centerComponent={{ text: 'View Teams', style: { color: '#fff', fontSize:20 } }} 
+					/>
+				}
+				
 				<View>
                     {this.state.isLoading && <Text style={{ color: 'red', textAlign: 'center' }}>Loading</Text>}
 					{!this.state.isLoading &&
