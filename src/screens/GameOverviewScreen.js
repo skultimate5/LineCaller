@@ -33,7 +33,7 @@ export class GameOverviewScreen extends React.Component {
             playing : false,
             onD : props.navigation.state.params.game.startedOn == 'D' ? true : false,
             oOrDWord : props.navigation.state.params.game.startedOn == 'D' ? 'Defense' : 'Offense',
-            playerStats: []
+            playerStats: {}
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -47,7 +47,7 @@ export class GameOverviewScreen extends React.Component {
         let team = await this.state.LocalStorage.getTeam(this.state.currentTeamName),
             lines = team.lines.slice(),
             players = team.players,
-            playerStats = []
+            playerStats = {}
             
         //put All players in first index of lines array
         lines.unshift({name : 'All', players : players})

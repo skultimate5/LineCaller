@@ -81,7 +81,7 @@ export class CreateNewGameScreen extends React.Component {
             teamScore : 0,
             lines: [],
             timestamp : new Date(),
-            playerStats: []
+            playerStats: {}
         }
 
         console.log(game)
