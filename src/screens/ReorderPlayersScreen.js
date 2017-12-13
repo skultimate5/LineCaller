@@ -182,7 +182,11 @@ class Row extends Component {
     
         return (
           <Animated.View >
-            <Text>{data.text}</Text>
+            <ListItem
+                key={data}
+                title={data.text}
+                hideChevron={true}
+            />
           </Animated.View>
         );
       }
@@ -219,43 +223,6 @@ const styles = StyleSheet.create({
           }
         })
       },
-    
-      row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 16,
-        height: 80,
-        flex: 1,
-        marginTop: 7,
-        marginBottom: 12,
-        borderRadius: 4,
-    
-    
-        ...Platform.select({
-          ios: {
-            width: window.width - 30 * 2,
-            shadowColor: 'rgba(0,0,0,0.2)',
-            shadowOpacity: 1,
-            shadowOffset: {height: 2, width: 2},
-            shadowRadius: 2,
-          },
-    
-          android: {
-            width: window.width - 30 * 2,
-            elevation: 0,
-            marginHorizontal: 30,
-          },
-        })
-      },
-    
-      image: {
-        width: 50,
-        height: 50,
-        marginRight: 30,
-        borderRadius: 25,
-      },
-    
       text: {
         fontSize: 24,
         color: '#222222',
