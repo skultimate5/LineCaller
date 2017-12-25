@@ -33,7 +33,8 @@ export class GameOverviewScreen extends React.Component {
             playing : false,
             onD : props.navigation.state.params.game.startedOn == 'D' ? true : false,
             oOrDWord : props.navigation.state.params.game.startedOn == 'D' ? 'Defense' : 'Offense',
-            playerStats: {}
+            playerStats: {},
+            mostRecentStat: ''
         }
 
         this.state.LocalStorage = new LocalStorage()
@@ -110,6 +111,7 @@ export class GameOverviewScreen extends React.Component {
 
                 {this.state.playing &&
                     <View style={{flex : 1}}>
+                        <Text>{this.state.mostRecentStat}</Text>
                         <ScrollView>
                             <List>
                                 {
@@ -243,9 +245,7 @@ export class GameOverviewScreen extends React.Component {
 
         playerStats[key].goals = playerStats[key].goals + 1
 
-        this.setState({playerStats})
-
-        console.log(`Goal ${player}`)
+        this.setState({playerStats, mostRecentStat: `Goal by ${player}`})
     }
 
     addPlayerAssist(player) {
@@ -254,8 +254,7 @@ export class GameOverviewScreen extends React.Component {
 
         playerStats[key].assists = playerStats[key].assists + 1
 
-        this.setState({playerStats})
-        console.log(`Assist ${player}`)
+        this.setState({playerStats, mostRecentStat: `Assist by ${player}`})
     }
 
     addPlayerD(player) {
@@ -264,8 +263,7 @@ export class GameOverviewScreen extends React.Component {
 
         playerStats[key].ds = playerStats[key].ds + 1
 
-        this.setState({playerStats})
-        console.log(`D ${player}`)
+        this.setState({playerStats, mostRecentStat: `D by ${player}`})   
     }
 
     addPlayerTurn(player) {
@@ -274,8 +272,7 @@ export class GameOverviewScreen extends React.Component {
 
         playerStats[key].turns = playerStats[key].turns + 1
 
-        this.setState({playerStats})
-        console.log(`Turn ${player}`)
+        this.setState({playerStats, mostRecentStat: `Turn by ${player}`})        
     }
 
     askToFinishGame() {
