@@ -78,7 +78,7 @@ export class GameOverviewScreen extends React.Component {
                     color: '#fff',
                     onPress: () => this.props.navigation.goBack(),
                 }}
-                centerComponent={{ text: `Playing ${this.state.oOrDWord}`, style: { color: '#fff', fontSize:20 } }} 
+                centerComponent={{ text: `${this.state.playing ? 'Started' : 'Starting'} on ${this.state.oOrDWord}`, style: { color: '#fff', fontSize:20 } }} 
                 rightComponent={{
                     icon: 'done',
                     color: '#fff',
