@@ -207,15 +207,20 @@ export class GameOverviewScreen extends React.Component {
                         <Modal style={styles.bottomModal} backdropColor={'white'} backdropOpacity={0.7}
                             isVisible={this.state.isModalVisible} onBackdropPress={() => this._hideModal()}>
                             <View>
-                                <Picker
-                                    selectedValue={this.state.lineSelectedIndex}
-                                    onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
-                                    {this.state.lines.map((line, index) => {
-                                        return (
-                                            <Picker.Item label={line.name} value={index} key={index}/>
-                                        ) 
-                                    })}
-                                </Picker>
+                                <ScrollView>
+                                    <List>
+                                        {
+                                            this.state.lines.map((line, index) => (
+                                                <ListItem
+                                                    key={index}
+                                                    title={line.name}
+                                                    hideChevron={true}
+                                                    onPress={() => {this.updateLineShown(index)}}
+                                                />
+                                            ))
+                                        }
+                                    </List>
+                                </ScrollView>
                                 <Button
                                     raised
                                     buttonStyle={[{backgroundColor: '#02968A'}]}
@@ -355,6 +360,7 @@ export class GameOverviewScreen extends React.Component {
 
         this.setState({lineSelectedIndex: itemIndex})
         this.setState({playersAvailable : filteredPlayers})
+        this._hideModal()
     }
 
     updatePlayers(currentPlayersAvailable, currentPlayersSelected) {
