@@ -207,7 +207,8 @@ export class GameOverviewScreen extends React.Component {
                         <Modal style={styles.bottomModal} backdropColor={'white'} backdropOpacity={0.7}
                             isVisible={this.state.isModalVisible} onBackdropPress={() => this._hideModal()}>
                             <View>
-                                <Picker
+                                {/* Put clickable list here instead of picker */}
+                                {/* <Picker
                                     selectedValue={this.state.lineSelectedIndex}
                                     onValueChange={(itemValue, itemIndex) => this.updateLineShown(itemIndex)}>
                                     {this.state.lines.map((line, index) => {
@@ -215,7 +216,7 @@ export class GameOverviewScreen extends React.Component {
                                             <Picker.Item label={line.name} value={index} key={index}/>
                                         ) 
                                     })}
-                                </Picker>
+                                </Picker> */}
                                 <Button
                                     raised
                                     buttonStyle={[{backgroundColor: '#02968A'}]}
